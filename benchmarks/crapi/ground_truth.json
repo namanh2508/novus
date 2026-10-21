@@ -1,0 +1,73 @@
+{
+  "benchmark_name": "OWASP crAPI v1.0",
+  "target_base_url": "http://localhost:8888",
+  "vulnerabilities": [
+    {
+      "vuln_id": "CRAPI-BOLA-01",
+      "category": "BOLA",
+      "owasp_id": "API1:2023",
+      "title": "Broken Object Level Authorization in Vehicle Location API",
+      "method": "GET",
+      "endpoint_pattern": "/identity/api/v2/vehicle/{vehicle_id}/location",
+      "object_type": "vehicle_id",
+      "target_role": "user",
+      "oracle_invariant": "INV_OBJECT_ISOLATION",
+      "expected_unauthorized_status": 403,
+      "actual_vulnerable_status": 200,
+      "payload_template": {},
+      "criticality": "HIGH",
+      "description": "Any authenticated user can query GPS location and real-time telemetry of any arbitrary vehicle by replacing vehicle_id UUID."
+    },
+    {
+      "vuln_id": "CRAPI-BOLA-02",
+      "category": "BOLA",
+      "owasp_id": "API1:2023",
+      "title": "Broken Object Level Authorization in Workshop Orders API",
+      "method": "GET",
+      "endpoint_pattern": "/workshop/api/shop/orders/{order_id}",
+      "object_type": "order_id",
+      "target_role": "user",
+      "oracle_invariant": "INV_OBJECT_ISOLATION",
+      "expected_unauthorized_status": 403,
+      "actual_vulnerable_status": 200,
+      "payload_template": {},
+      "criticality": "HIGH",
+      "description": "Users can view full transaction and order details of any other customer by changing order_id."
+    },
+    {
+      "vuln_id": "CRAPI-BFLA-01",
+      "category": "BFLA",
+      "owasp_id": "API5:2023",
+      "title": "Broken Function Level Authorization in Admin Coupon Creation",
+      "method": "POST",
+      "endpoint_pattern": "/community/api/v2/coupon/new-coupon",
+      "object_type": "coupon",
+      "target_role": "user",
+      "oracle_invariant": "INV_ROLE_HIERARCHY",
+      "expected_unauthorized_status": 403,
+      "actual_vulnerable_status": 200,
+      "payload_template": {
+        "coupon_code": "DISCOUNT100",
+        "amount": "100"
+      },
+      "criticality": "HIGH",
+      "description": "Standard user accounts can access administrative coupon creation endpoint without admin JWT claims."
+    },
+    {
+      "vuln_id": "CRAPI-BOLA-03",
+      "category": "BOLA",
+      "owasp_id": "API1:2023",
+      "title": "Broken Object Level Authorization in User Vehicle Videos",
+      "method": "GET",
+      "endpoint_pattern": "/identity/api/auth/v1/user/videos/{video_id}",
+      "object_type": "video_id",
+      "target_role": "user",
+      "oracle_invariant": "INV_OBJECT_ISOLATION",
+      "expected_unauthorized_status": 403,
+      "actual_vulnerable_status": 200,
+      "payload_template": {},
+      "criticality": "MEDIUM",
+      "description": "Users can download dashboard camera footage uploaded by other vehicle owners."
+    }
+  ]
+}

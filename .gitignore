@@ -1,2 +1,38 @@
+# Dependencies & Environments
+.venv/
+env/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing & Linting Caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Go Binaries & Temp Artifacts
+*.exe
+*.dll
+*.so
+tools/fastprobe/fastprobe.exe
+
+# Local Databases & Evidence
+*.db
+*.sqlite
+*.sqlite3
+evidence_runs/
+
+# Large Clones & Analyst Dumps
 repos/
 analyst/
+.context_cache/
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
