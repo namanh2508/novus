@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import json
+import urllib.error
 import urllib.request
 
+import pytest
 from typer.testing import CliRunner
 
 from agentic_pentest.presentation.chat import InteractiveChatSession
@@ -61,3 +63,35 @@ def test_chat_session_commands() -> None:
     session.show_graph()
     session.show_findings()
     session.show_poc()
+
+
+def test_live_demo_server_bola_token_enforcement() -> None:
+    server = start_live_demo_server(host="127.0.0.1", port=8998)
+    try:
+        # 1. Anonymous request should be rejected (401)
+        req_anon = urllib.request.Request("http://127.0.0.1:8998/identity/api/v2/vehicle/v-alice-101/location")
+        with pytest.raises(urllib.error.HTTPError) as exc_info:
+            urllib.request.urlopen(req_anon)
+        assert exc_info.value.code == 401
+
+        # 2. Garbage token request should be rejected (401)
+        req_garbage = urllib.request.Request(
+            "http://127.0.0.1:8998/identity/api/v2/vehicle/v-alice-101/location",
+            headers={"Authorization": "Bearer invalid_garbage_token"},
+        )
+        with pytest.raises(urllib.error.HTTPError) as exc_info:
+            urllib.request.urlopen(req_garbage)
+        assert exc_info.value.code == 401
+
+        # 3. Authenticated request from Bob succeeds (200 - BOLA verified)
+        req_bob = urllib.request.Request(
+            "http://127.0.0.1:8998/identity/api/v2/vehicle/v-alice-101/location",
+            headers={"Authorization": "Bearer token_bob"},
+        )
+        with urllib.request.urlopen(req_bob) as resp:
+            data = json.loads(resp.read().decode())
+            assert resp.status == 200
+            assert data["vehicle_id"] == "v-alice-101"
+            assert "location" in data
+    finally:
+        server.shutdown()

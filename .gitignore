@@ -27,7 +27,6 @@ evidence_runs/
 
 # Large Clones & Analyst Dumps
 repos/
-analyst/
 .context_cache/
 
 # OS and IDE files
