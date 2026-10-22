@@ -10,8 +10,8 @@
 | ID | Epic | Task Description | Priority | Dep | Estimate | Deliverable (File Path) | DoD (Definition of Done) |
 |---|---|---|:---:|:---:|:---:|---|---|
 | **T-001** | Foundation | Define pure Domain entities & exceptions | DONE | - | 2d | `src/agentic_pentest/domain/entities.py` | 100% type annotated, frozen dataclasses, 0 external imports (COMPLETED) |
-| **T-002** | Foundation | Implement Semantic Diff & Invariant Checker | IN PROGRESS | T-001 | 2d | `src/agentic_pentest/domain/invariants.py` | Passes unit tests with 10 synthetic JSON test pairs |
-| **T-003** | Ingestion | Build OpenAPI 3.0 Parser & Endpoint Discovery | MUST | T-001 | 3d | `src/agentic_pentest/infrastructure/discovery/openapi_parser.py` | Successfully extracts crAPI OpenAPI spec into TargetObjects |
+| **T-002** | Foundation | Implement Semantic Diff & Invariant Checker | DONE | T-001 | 2d | `src/agentic_pentest/domain/invariants.py` | Passes unit tests with 10 synthetic JSON test pairs (COMPLETED) |
+| **T-003** | Ingestion | Build OpenAPI 3.0 Parser & Endpoint Discovery | IN PROGRESS | T-001 | 3d | `src/agentic_pentest/infrastructure/discovery/openapi_parser.py` | Successfully extracts crAPI OpenAPI spec into TargetObjects |
 | **T-004** | Ingestion | Implement Playbook Registry & YAML Validator | MUST | T-001 | 2d | `src/agentic_pentest/infrastructure/playbooks/registry.py` | Loads and validates `bola_read.yaml` against schema |
 | **T-005** | Storage | Build NetworkX Evidence Graph Store | MUST | T-001 | 3d | `src/agentic_pentest/infrastructure/storage/networkx_graph.py` | Supports add_principal, add_object, query_paths with tests |
 | **T-006** | Storage | Build SQLite Immutable Audit Trail Store | MUST | T-001 | 2d | `src/agentic_pentest/infrastructure/storage/sqlite_audit_store.py` | Stores raw HTTP request/response tuples with SHA-256 hash |
