@@ -23,5 +23,5 @@
 | **T-012** | Planning | Implement Evidence-Guided Adaptive Planner | DONE | T-005,T-011 | 4d | `src/agentic_pentest/application/use_cases/plan_next_action.py` | Dynamically updates plan based on evidence graph observations (COMPLETED) |
 | **T-013** | SSDLC | Implement SARIF 2.1.0 Exporter with Code Fixes | DONE | T-010 | 2d | `src/agentic_pentest/application/use_cases/export_sarif.py` | Validated by Microsoft SARIF validator tool (COMPLETED) |
 | **T-014** | Presentation | Build Typer CLI interface (`agentic-pentest`) | DONE | T-012 | 2d | `src/agentic_pentest/presentation/cli.py` | `agentic-pentest run --spec ... --target ...` works cleanly (COMPLETED) |
-| **T-015** | Benchmark | Setup automated crAPI test harness & Baselines | IN PROGRESS | T-014 | 5d | `tests/benchmarks/crapi_runner.py` | Runs B0 (Schemathesis), B1 (Plain LLM), B3 (Proposed) |
-| **T-016** | Evaluation | Compute Metrics (Precision, Recall, RPCF, F1) | MUST | T-015 | 3d | `tests/benchmarks/evaluate_metrics.py` | Generates LaTeX tables, boxplots and p-value statistical tests |
+| **T-015** | Benchmark | Setup automated crAPI test harness & Baselines | DONE | T-014 | 5d | `src/agentic_pentest/evaluation/crapi_runner.py` | Runs B0 (Schemathesis), B1 (Plain LLM), B3 (Proposed) (COMPLETED) |
+| **T-016** | Evaluation | Compute Metrics (Precision, Recall, RPCF, F1) | DONE | T-015 | 3d | `src/agentic_pentest/evaluation/evaluate_metrics.py` | Generates LaTeX tables, boxplots and p-value statistical tests (COMPLETED) |
