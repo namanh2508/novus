@@ -2,22 +2,29 @@
 
 import pytest
 import respx
-from agentic_pentest.application.use_cases.verify_differential import DifferentialVerifier
-from agentic_pentest.infrastructure.executors.httpx_executor import HTTPXExecutor
-from httpx import Response
+from httpx import Request, Response
 
+from agentic_pentest.application.use_cases.verify_differential import DifferentialVerifier
 from agentic_pentest.domain.entities import HTTPMethod, Principal, Role, TargetObject
+from agentic_pentest.infrastructure.executors.httpx_executor import HTTPXExecutor
 
 
 @pytest.mark.asyncio
 @respx.mock
 async def test_differential_verifier_confirms_bola() -> None:
-    # 1. Baseline: Alice accesses her car -> 200
+    # 3-Way Differential Mock:
+    # Authenticated requests return 200 with vehicle telemetry.
+    # Unauthenticated requests return 401 Unauthorized.
+    def mock_response(request: Request) -> Response:
+        if "authorization" in request.headers:
+            return Response(
+                200,
+                json={"vehicle_id": "v123", "lat": 10.1, "timestamp": "2026-10-22T00:00:00Z"},
+            )
+        return Response(401, json={"error": "Unauthorized"})
+
     respx.get("http://localhost:8888/identity/api/v2/vehicle/v123/location").mock(
-        return_value=Response(
-            200,
-            json={"vehicle_id": "v123", "lat": 10.1, "timestamp": "2026-10-22T00:00:00Z"},
-        )
+        side_effect=mock_response
     )
 
     alice = Principal(id="u_alice", name="Alice", role=Role.USER, jwt_token="token_alice")
