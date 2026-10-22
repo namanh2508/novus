@@ -70,10 +70,10 @@ src/agentic_pentest/
 from typing import Protocol, Tuple
 from ...domain.entities import EvidenceObservation, Finding
 
+
 class IIndependentVerifier(Protocol):
     async def verify_observation(
-        self,
-        observation: EvidenceObservation
+        self, observation: EvidenceObservation
     ) -> Tuple[bool, float, Optional[Finding]]:
         """
         Executes 3-way differential verification.
@@ -87,11 +87,10 @@ class IIndependentVerifier(Protocol):
 from typing import Protocol, List
 from ...domain.entities import TestAction, Hypothesis
 
+
 class IAdaptivePlanner(Protocol):
     async def select_next_action(
-        self,
-        active_hypotheses: List[Hypothesis],
-        remaining_budget: int
+        self, active_hypotheses: List[Hypothesis], remaining_budget: int
     ) -> Optional[TestAction]:
         """
         Evaluates current evidence graph state and remaining request budget

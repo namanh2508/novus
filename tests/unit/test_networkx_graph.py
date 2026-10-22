@@ -1,8 +1,7 @@
 """Unit tests for NetworkX Evidence Graph adapter."""
 
-from agentic_pentest.infrastructure.storage.networkx_graph import NetworkXEvidenceGraph
-
 from agentic_pentest.domain.entities import Principal, Role, TargetObject
+from agentic_pentest.infrastructure.storage.networkx_graph import NetworkXEvidenceGraph
 
 
 def test_evidence_graph_principals_and_objects() -> None:

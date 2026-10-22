@@ -57,14 +57,18 @@ Our architecture enforces 4 strict concentric rings. **Dependencies only point i
    class PentestAgentException(Exception):
        """Base exception for all agent domain and application errors."""
 
+
    class ScopeViolationError(PentestAgentException):
        """Raised when an executor attempts an action outside the approved scope."""
+
 
    class SideEffectBlockedError(PentestAgentException):
        """Raised when an action violates the blast radius policy without shadow clone."""
 
+
    class OracleVerificationError(PentestAgentException):
        """Raised when the differential oracle detects inconsistent data invariants."""
+
 
    class BudgetExceededError(PentestAgentException):
        """Raised when the request count or token limit has been exhausted."""

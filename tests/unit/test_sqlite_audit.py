@@ -2,13 +2,12 @@
 
 from datetime import UTC, datetime
 
-from agentic_pentest.infrastructure.storage.sqlite_audit_store import SQLiteAuditStore
-
 from agentic_pentest.domain.entities import (
     HTTPMethod,
     HTTPRequestObservation,
     HTTPResponseObservation,
 )
+from agentic_pentest.infrastructure.storage.sqlite_audit_store import SQLiteAuditStore
 
 
 def test_record_and_retrieve_audit_trail(tmp_path: object) -> None:
