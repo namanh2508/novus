@@ -60,6 +60,9 @@ def test_registry_registers_core_suite() -> None:
     assert "audit_login" in tool_names
     assert "seed_crapi" in tool_names
     assert "verify_bola" in tool_names
+    assert "verify_bfla" in tool_names
+    assert "verify_bopla" in tool_names
+    assert "mutate_parameter" in tool_names
 
 
 def test_registry_mcp_specs_compliance() -> None:

@@ -83,13 +83,14 @@ async def test_multi_agent_orchestrator_delegation() -> None:
 
     findings = await orchestrator.run_mission("http://localhost:8888")
 
-    # Invariants: 4 subagents executed
-    assert len(orchestrator.reports) == 4
+    # Invariants: 5 subagents executed
+    assert len(orchestrator.reports) == 5
     subagent_names = [r.agent_name for r in orchestrator.reports]
     assert "ReconSubagent" in subagent_names
     assert "IdentitySubagent" in subagent_names
     assert "BolaSubagent" in subagent_names
     assert "BflaSubagent" in subagent_names
+    assert "BoplaSubagent" in subagent_names
 
     # All subagents completed successfully
     assert all(r.status == "COMPLETED" for r in orchestrator.reports)
