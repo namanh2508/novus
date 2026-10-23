@@ -88,30 +88,107 @@ mypy --strict src/
 ```
 
 ### 6. Interactive Chat & Operator Terminal
-Launch the interactive agentic session featuring the Cyber-Whale mascot terminal UX:
+Launch the interactive agentic session featuring the compact Cyber-Whale mascot terminal UX:
+
+**Method 1: Direct Python module execution (recommended across all platforms):**
+```powershell
+# Windows PowerShell
+.venv\Scripts\python -m agentic_pentest.presentation.cli chat --target http://localhost:8888
+
+# Linux / macOS
+./.venv/bin/python -m agentic_pentest.presentation.cli chat --target http://localhost:8888
+```
+
+**Method 2: Using installed entrypoint (after `pip install -e .`):**
 ```powershell
 agentic-pentest chat --target http://localhost:8888
 ```
 
-Quick-action command shortcuts in interactive chat:
-- `0` / `status`   : Show current target, authentication, and permission state
-- `1` / `crawl`    : SPA headless crawl & JS bundle endpoint harvesting
-- `2` / `sast`     : AST route extraction from backend source code
-- `3` / `scan`     : 3-Way Differential Invariant verification (BOLA / BFLA)
-- `4` / `race`     : Burst concurrency audit for TOCTOU & coupon reuse race conditions
-- `5` / `graphql`  : GraphQL introspection and batching DoS exposure probe
-- `6` / `jwt`      : JWT `alg: none` bypass, signature stripping & weak secret cracker
-- `7` / `secrets`  : Sensitive file probe (`.env`, `.git`, heapdumps) and API key scanner
-- `8` / `ai-guard` : AST Taint Reachability & Guard Coverage risk evaluation on code
-- `9` / `diff`     : Generate unified git diff remediation patches
-- `10` / `eval`    : Run 30-case SE373 Benchmark test suite (Accuracy EX & Latency)
-- `guide`          : Show full pentest operator phase matrix
-- `learn <rule>`   : Inject domain constraints into active episodic memory
-- `compact`        : Toggle between compact summarized view and verbose audit stream
+---
+
+## 🛠️ Complete CLI Command Catalog (25 Commands)
+
+Execute any standalone tool directly from the terminal or CI/CD pipelines via `.venv\Scripts\python -m agentic_pentest.presentation.cli <command>`:
+
+| Command | Category | Description | Example Usage |
+| :--- | :--- | :--- | :--- |
+| `chat` | REPL | Launch interactive chat session with Cyber-Whale mascot | `python -m agentic_pentest.presentation.cli chat --target http://localhost:8888` |
+| `scan` | Autonomous | Run full 3-Way Differential Oracle verification on OpenAPI spec | `python -m agentic_pentest.presentation.cli scan --spec openapi.json` |
+| `loop` | Autonomous | Multi-turn autonomous pentest loop with hypothesis generation | `python -m agentic_pentest.presentation.cli loop --target http://localhost:8888` |
+| `multi-agent` | Orchestration | Orchestrate 3 specialized agents (Recon, Verifier, Patch) | `python -m agentic_pentest.presentation.cli multi-agent --target http://localhost:8888` |
+| `plan` | Planning | Interactive OWASP Top 10 hypothesis planning session | `python -m agentic_pentest.presentation.cli plan --target http://localhost:8888` |
+| `race` | Audit (UC-12) | Burst concurrency audit for TOCTOU & coupon reuse bugs | `python -m agentic_pentest.presentation.cli race --endpoint http://localhost:8888/api/coupon` |
+| `graphql` | Audit (UC-13) | Probe GraphQL Introspection exposure & batching DoS | `python -m agentic_pentest.presentation.cli graphql --target http://localhost:8888` |
+| `jwt` | Audit (UC-14) | Probe `alg: none`, signature stripping & crack weak HMAC | `python -m agentic_pentest.presentation.cli jwt --token <jwt_token>` |
+| `secrets` | Audit (UC-15) | Probe sensitive paths (`.env`, `.git`) & scan API keys | `python -m agentic_pentest.presentation.cli secrets --url http://localhost:8888` |
+| `ai-guard` | Code Guard | AST Taint Reachability & Guard Coverage risk evaluation | `python -m agentic_pentest.presentation.cli ai-guard src/app.py` |
+| `crawl` | Recon | Headless SPA crawler harvesting endpoints from JS bundles | `python -m agentic_pentest.presentation.cli crawl --url http://localhost:8888` |
+| `sast` | Recon | AST route extractor for FastAPI / Express / Flask code | `python -m agentic_pentest.presentation.cli sast src/` |
+| `proxy` | Interception | Real-time traffic sniffer and MITM proxy | `python -m agentic_pentest.presentation.cli proxy --port 8080` |
+| `cve` | Intelligence | Advisory intelligence scanning technology fingerprints | `python -m agentic_pentest.presentation.cli cve --target http://localhost:8888` |
+| `audit-headers` | Audit | Audit HSTS, CSP, and defensive HTTP response headers | `python -m agentic_pentest.presentation.cli audit-headers http://localhost:8888` |
+| `audit-cookies` | Audit | Audit HttpOnly, SameSite, Secure cookie attributes | `python -m agentic_pentest.presentation.cli audit-cookies http://localhost:8888` |
+| `audit-cors` | Audit | Detect wildcard Access-Control-Allow-Origin & reflections | `python -m agentic_pentest.presentation.cli audit-cors http://localhost:8888` |
+| `audit-login` | Audit | Audit login rate limiting and brute force protection | `python -m agentic_pentest.presentation.cli audit-login http://localhost:8888/api/login` |
+| `seed-crapi` | Benchmark | Seed OWASP crAPI benchmark environment (Alice/Bob/Vehicles) | `python -m agentic_pentest.presentation.cli seed-crapi --target http://localhost:8888` |
+| `eval` | Benchmark | Run 30-case SE373 evaluation suite measuring Accuracy EX | `python -m agentic_pentest.presentation.cli eval --spec evals/questions/questions.jsonl` |
+| `demo-server` | Lab | Start live mock target server for offline demonstration | `python -m agentic_pentest.presentation.cli demo-server --port 8888` |
+| `export-vault` | Reporting | Export evidence, attack graphs & findings to Obsidian Vault | `python -m agentic_pentest.presentation.cli export-vault --output reports/vault` |
+| `sessions` | Audit Trail | Inspect persisted SQLite sessions and evidence graphs | `python -m agentic_pentest.presentation.cli sessions` |
+| `interactive` | Planning | Multi-turn goal-driven pentest planner REPL | `python -m agentic_pentest.presentation.cli interactive` |
+| `mcp-server` | Integration | Launch FastMCP server over stdio for Claude Code / IDEs | `python -m agentic_pentest.presentation.cli mcp-server` |
 
 ---
 
-## 🔌 Model Context Protocol (MCP) Integration
+## ⚡ Interactive Chat REPL Commands & Numeric Shortcuts
+
+Inside the `chat` operator terminal, use numeric keys or direct command names for instant action:
+
+- **`0` / `status`**   : Display active target, principal sessions (Alice/Bob), and Safe-Mode status.
+- **`1` / `crawl`**    : Run headless crawler on client JS bundles to extract hidden API routes.
+- **`2` / `sast`**     : Run AST route extractor on backend source files.
+- **`3` / `scan`**     : Run 3-Way Differential Invariant verification for BOLA / BFLA.
+- **`4` / `race`**     : Dispatch synchronized concurrent burst requests to audit TOCTOU race conditions.
+- **`5` / `graphql`**  : Probe GraphQL schema introspection exposure and batching DoS limits.
+- **`6` / `jwt`**      : Test JWT `alg: none` bypass, signature stripping, and crack weak secrets.
+- **`7` / `secrets`**  : Probe sensitive paths (`.env`, `.git/HEAD`, heapdumps) and scan API key entropy.
+- **`8` / `ai-guard`** : Calculate AST Tree Coverage and Taint Reachability risk scores on code.
+- **`9` / `diff`**     : Generate unified Git diff remediation patches for all verified findings.
+- **`10` / `eval`**    : Run the 30-case SE373 Benchmark test suite and calculate Task Accuracy (EX).
+- **`guide`**          : Display the 6-phase S-SDLC pentest execution matrix.
+- **`learn <rule>`**   : Inject an offensive invariant into `MEMORY.md` and SQLite episodic memory.
+- **`compact`**        : Toggle between compact summarized view and verbose raw audit stream.
+- **`vault`**          : Export findings and graph relationships to Obsidian Markdown Vault (`reports/vault/`).
+- **`sarif`**          : Export findings to OASIS SARIF 2.1.0 format for GitHub Code Scanning alerts.
+- **`poc`**            : Generate standalone, zero-dependency reproducible Python exploit scripts.
+- **`seed`**           : Seed test principals (Alice/Bob) and resources into the target lab.
+- **`headers`**        : Audit HSTS, CSP, and defensive security headers.
+- **`cookies`**        : Audit HttpOnly, SameSite, and Secure flags on session cookies.
+- **`cors`**           : Audit CORS origin reflection and credentials allowance.
+- **`login`**          : Audit login rate limiting and brute force countermeasures.
+- **`ask <query>`**    : Consult the AI reasoning engine for advice or next steps.
+- **`demo`**           : Start the mock demo target server.
+- **`exit` / `quit`**  : Exit the interactive operator session.
+
+---
+
+## 🧠 Two-Tier Memory Architecture & Topic Splitting
+
+Aligned with **SE373.R11 (Agentic AI Engineering)** and the **12-Factor Agent** principles:
+
+### 1. Bounded Tier 1 Working Index (`MEMORY.md`)
+- `MEMORY.md` lives in the project root as a human-readable, bounded Markdown file ($< 2,200$ characters / $< 500$ tokens).
+- It is injected as a **frozen snapshot** into the system prompt at cold-start to prevent context bloat and preserve prefix caching.
+
+### 2. Handling Memory Overflow: The Topic Splitting Pattern
+When learned knowledge exceeds the 2,200-character budget:
+- `MEMORY.md` acts strictly as an **Index Table of Contents** pointing to topic-specific files.
+- Granular findings, schemas, and extensive traces are automatically offloaded to:
+  `memories/topics/<category>_<target>.md` (e.g., `memories/topics/bola_localhost_8888.md`, `memories/topics/jwt_invariants.md`).
+- In `MEMORY.md`, a single compact line is kept:
+  `- [JWT] Weak HMAC secret cracked -> see memories/topics/jwt_invariants.md`
+- **Compaction & Deduplication**: When new rules supersede old constraints, the agent automatically marks old rules `[SUPERSEDED]` and removes redundant entries to stay within the character budget.
+- **Tier 2 Backing Store**: All raw packets, hash chains, and session history remain persisted in SQLite (`agent_sessions.db` & `episodic_knowledge.db`) with FTS5 full-text indexing for cross-session semantic search.
 
 This repository exposes **14 production-grade pentest tools** over the FastMCP protocol, enabling direct tool execution inside AI developer environments like **Claude Code**, **Cursor**, **Antigravity**, or **Roo/Cline**:
 
