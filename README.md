@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/logo.png" width="180" alt="Agentic Pentest Logo" />
+</p>
+
 # Evidence-Guided Agentic Web/API Pentesting
 
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://python.org)
@@ -106,13 +110,15 @@ agentic-pentest chat --target http://localhost:8888
 
 ---
 
-## 🛠️ Complete CLI Command Catalog (25 Commands)
+## 🛠️ Complete CLI Command Catalog (27 Commands)
 
 Execute any standalone tool directly from the terminal or CI/CD pipelines via `.venv\Scripts\python -m agentic_pentest.presentation.cli <command>`:
 
 | Command | Category | Description | Example Usage |
 | :--- | :--- | :--- | :--- |
-| `chat` | REPL | Launch interactive chat session with Cyber-Whale mascot | `python -m agentic_pentest.presentation.cli chat --target http://localhost:8888` |
+| `chat` | REPL | Interactive operator terminal with Cyber-Whale mascot, Tab completion & ghost-text suggestions | `python -m agentic_pentest.presentation.cli chat --target http://localhost:8888` |
+| `browser` | Recon (Level 5) | Deep Headless Chromium crawler simulating button clicks & dynamic API harvesting | `python -m agentic_pentest.presentation.cli browser http://localhost:8888 --clicks 20` |
+| `dashboard` | Proxy (Level 5) | Real-time Burp Suite-style Interception Proxy Web Dashboard (Repeater/Intercept) on port 8090 | `python -m agentic_pentest.presentation.cli dashboard --port 8090` |
 | `scan` | Autonomous | Run full 3-Way Differential Oracle verification on OpenAPI spec | `python -m agentic_pentest.presentation.cli scan --spec openapi.json` |
 | `loop` | Autonomous | Multi-turn autonomous pentest loop with hypothesis generation | `python -m agentic_pentest.presentation.cli loop --target http://localhost:8888` |
 | `multi-agent` | Orchestration | Orchestrate 3 specialized agents (Recon, Verifier, Patch) | `python -m agentic_pentest.presentation.cli multi-agent --target http://localhost:8888` |
@@ -124,14 +130,14 @@ Execute any standalone tool directly from the terminal or CI/CD pipelines via `.
 | `ai-guard` | Code Guard | AST Taint Reachability & Guard Coverage risk evaluation | `python -m agentic_pentest.presentation.cli ai-guard src/app.py` |
 | `crawl` | Recon | Headless SPA crawler harvesting endpoints from JS bundles | `python -m agentic_pentest.presentation.cli crawl --url http://localhost:8888` |
 | `sast` | Recon | AST route extractor for FastAPI / Express / Flask code | `python -m agentic_pentest.presentation.cli sast src/` |
-| `proxy` | Interception | Real-time traffic sniffer and MITM proxy | `python -m agentic_pentest.presentation.cli proxy --port 8080` |
-| `cve` | Intelligence | Advisory intelligence scanning technology fingerprints | `python -m agentic_pentest.presentation.cli cve --target http://localhost:8888` |
+| `proxy` | Interception | Real-time passive traffic sniffer and MITM stream proxy | `python -m agentic_pentest.presentation.cli proxy --port 8080` |
+| `cve` | Intelligence | Advisory intelligence scanning technology fingerprints | `python -m agentic_pentest.presentation.cli cve --banner Werkzeug/2.0.1` |
 | `audit-headers` | Audit | Audit HSTS, CSP, and defensive HTTP response headers | `python -m agentic_pentest.presentation.cli audit-headers http://localhost:8888` |
 | `audit-cookies` | Audit | Audit HttpOnly, SameSite, Secure cookie attributes | `python -m agentic_pentest.presentation.cli audit-cookies http://localhost:8888` |
 | `audit-cors` | Audit | Detect wildcard Access-Control-Allow-Origin & reflections | `python -m agentic_pentest.presentation.cli audit-cors http://localhost:8888` |
 | `audit-login` | Audit | Audit login rate limiting and brute force protection | `python -m agentic_pentest.presentation.cli audit-login http://localhost:8888/api/login` |
 | `seed-crapi` | Benchmark | Seed OWASP crAPI benchmark environment (Alice/Bob/Vehicles) | `python -m agentic_pentest.presentation.cli seed-crapi --target http://localhost:8888` |
-| `eval` | Benchmark | Run 30-case SE373 evaluation suite measuring Accuracy EX | `python -m agentic_pentest.presentation.cli eval --spec evals/questions/questions.jsonl` |
+| `eval` | Benchmark | Run 30-case SE373 evaluation suite measuring Accuracy EX | `python -m agentic_pentest.presentation.cli eval -q evals/questions/questions.jsonl` |
 | `demo-server` | Lab | Start live mock target server for offline demonstration | `python -m agentic_pentest.presentation.cli demo-server --port 8888` |
 | `export-vault` | Reporting | Export evidence, attack graphs & findings to Obsidian Vault | `python -m agentic_pentest.presentation.cli export-vault --output reports/vault` |
 | `sessions` | Audit Trail | Inspect persisted SQLite sessions and evidence graphs | `python -m agentic_pentest.presentation.cli sessions` |
