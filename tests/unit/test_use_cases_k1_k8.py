@@ -121,7 +121,9 @@ def test_natural_language_intent_router() -> None:
     assert r3.recommended_tool == "CorsSecurityAuditor"
 
     # UC-4 Login prompt (from Teacher's feedback)
-    r4 = router.route("Kiểm tra các trang đăng nhập có dấu hiệu cấu hình bảo mật yếu không, ưu tiên phép kiểm tra ít tác động.")
+    r4 = router.route(
+        "Kiểm tra các trang đăng nhập có dấu hiệu cấu hình bảo mật yếu không, ưu tiên phép kiểm tra ít tác động."
+    )
     assert r4.intent == PentestIntent.AUDIT_LOGIN
     assert r4.recommended_tool == "LoginSecurityAuditor"
 
@@ -129,3 +131,37 @@ def test_natural_language_intent_router() -> None:
     r5 = router.route("Kiểm tra kiểm soát truy cập đối tượng BOLA/IDOR trên API.")
     assert r5.intent == PentestIntent.VERIFY_BOLA
     assert r5.recommended_tool == "DifferentialVerifier"
+
+    # Remediation prompt
+    r6 = router.route("Hướng dẫn khắc phục và vá lỗi header.")
+    assert r6.intent == PentestIntent.REMEDIATION
+
+    # Seeder prompt
+    r7 = router.route("Seed tài khoản crAPI thật")
+    assert r7.intent == PentestIntent.SEED_CRAPI
+
+    # Dynamic URL extraction
+    r8 = router.route("Kiểm tra header của http://127.0.0.1:8888/identity")
+    assert r8.intent == PentestIntent.AUDIT_HEADERS
+    assert r8.extracted_url == "http://127.0.0.1:8888/identity"
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_crapi_benchmark_seeder() -> None:
+    from agentic_pentest.application.use_cases.seed_crapi import CrapiBenchmarkSeeder
+
+    respx.post("http://localhost:8888/identity/api/auth/signup").mock(
+        return_value=Response(200, json={"status": 200, "message": "User registered"})
+    )
+    respx.post("http://localhost:8888/identity/api/auth/login").mock(
+        return_value=Response(200, json={"token": "mock_jwt_token_12345"})
+    )
+    executor = HTTPXExecutor(allowed_hosts=["localhost:8888"])
+    seeder = CrapiBenchmarkSeeder(executor)
+    res = await seeder.seed("http://localhost:8888")
+
+    assert res.status == "SUCCESS"
+    assert res.alice.jwt_token == "mock_jwt_token_12345"
+    assert res.bob.jwt_token == "mock_jwt_token_12345"
+    assert res.target_vehicle.value == CrapiBenchmarkSeeder.DEFAULT_CRAPI_VEHICLE_UUID

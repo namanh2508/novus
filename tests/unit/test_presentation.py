@@ -69,7 +69,9 @@ def test_live_demo_server_bola_token_enforcement() -> None:
     server = start_live_demo_server(host="127.0.0.1", port=8998)
     try:
         # 1. Anonymous request should be rejected (401)
-        req_anon = urllib.request.Request("http://127.0.0.1:8998/identity/api/v2/vehicle/v-alice-101/location")
+        req_anon = urllib.request.Request(
+            "http://127.0.0.1:8998/identity/api/v2/vehicle/v-alice-101/location"
+        )
         with pytest.raises(urllib.error.HTTPError) as exc_info:
             urllib.request.urlopen(req_anon)
         assert exc_info.value.code == 401
