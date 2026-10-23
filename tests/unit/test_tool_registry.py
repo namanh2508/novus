@@ -58,6 +58,11 @@ def test_registry_registers_core_suite() -> None:
     assert "audit_cookies" in tool_names
     assert "audit_cors" in tool_names
     assert "audit_login" in tool_names
+    assert "audit_race_condition" in tool_names
+    assert "audit_graphql" in tool_names
+    assert "audit_jwt" in tool_names
+    assert "audit_secret_leak" in tool_names
+    assert "audit_ai_code" in tool_names
     assert "seed_crapi" in tool_names
     assert "verify_bola" in tool_names
     assert "verify_bfla" in tool_names

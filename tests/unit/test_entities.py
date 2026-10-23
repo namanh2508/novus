@@ -4,6 +4,7 @@ from dataclasses import FrozenInstanceError
 from datetime import UTC, datetime
 
 import pytest
+
 from agentic_pentest.domain.entities import (
     DifferentialTriplet,
     Finding,

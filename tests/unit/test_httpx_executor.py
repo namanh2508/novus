@@ -2,11 +2,11 @@
 
 import pytest
 import respx
-from agentic_pentest.infrastructure.executors.httpx_executor import HTTPXExecutor
 from httpx import Response
 
 from agentic_pentest.application.interfaces.executor import ScopeViolationError
 from agentic_pentest.domain.entities import HTTPMethod, Principal, Role
+from agentic_pentest.infrastructure.executors.httpx_executor import HTTPXExecutor
 
 
 @pytest.mark.asyncio

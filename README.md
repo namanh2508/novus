@@ -77,17 +77,74 @@ cd ../..
 
 # Check status
 .\deployments\run_crapi.ps1 -Action status
-```
-
 ### 5. Run Verification Test Suite
 ```powershell
-# Run fast unit tests
-pytest -q tests/unit/
+# Run fast unit tests (99+ tests)
+$env:PYTHONPATH="src"; pytest -q tests/unit/
 
-# Run lint and type checking
+# Run lint and strict type checking (0 errors)
 ruff check .
 mypy --strict src/
 ```
+
+### 6. Interactive Chat & Operator Terminal
+Launch the interactive agentic session featuring the Cyber-Whale mascot terminal UX:
+```powershell
+agentic-pentest chat --target http://localhost:8888
+```
+
+Quick-action command shortcuts in interactive chat:
+- `0` / `status`   : Show current target, authentication, and permission state
+- `1` / `crawl`    : SPA headless crawl & JS bundle endpoint harvesting
+- `2` / `sast`     : AST route extraction from backend source code
+- `3` / `scan`     : 3-Way Differential Invariant verification (BOLA / BFLA)
+- `4` / `race`     : Burst concurrency audit for TOCTOU & coupon reuse race conditions
+- `5` / `graphql`  : GraphQL introspection and batching DoS exposure probe
+- `6` / `jwt`      : JWT `alg: none` bypass, signature stripping & weak secret cracker
+- `7` / `secrets`  : Sensitive file probe (`.env`, `.git`, heapdumps) and API key scanner
+- `8` / `ai-guard` : AST Taint Reachability & Guard Coverage risk evaluation on code
+- `9` / `diff`     : Generate unified git diff remediation patches
+- `10` / `eval`    : Run 30-case SE373 Benchmark test suite (Accuracy EX & Latency)
+- `guide`          : Show full pentest operator phase matrix
+- `learn <rule>`   : Inject domain constraints into active episodic memory
+- `compact`        : Toggle between compact summarized view and verbose audit stream
+
+---
+
+## 🔌 Model Context Protocol (MCP) Integration
+
+This repository exposes **14 production-grade pentest tools** over the FastMCP protocol, enabling direct tool execution inside AI developer environments like **Claude Code**, **Cursor**, **Antigravity**, or **Roo/Cline**:
+
+```powershell
+# Start FastMCP server on stdio
+agentic-pentest mcp
+```
+
+### Exposed MCP Tools (14 Tools):
+1. `audit_cookies`: Audit `HttpOnly`, `SameSite`, and `Secure` cookie attributes.
+2. `audit_cors`: Detect wildcard `Access-Control-Allow-Origin` and credential reflections.
+3. `audit_headers`: Audit `HSTS`, `CSP`, and defensive response headers.
+4. `audit_login_bruteforce`: Verify rate limiting and exponential backoff on auth endpoints.
+5. `audit_race_condition`: Probe concurrency race conditions via burst synchronization.
+6. `audit_graphql_security`: Extract introspection schemas and probe batching DoS.
+7. `audit_jwt_security`: Probe `alg: none`, signature stripping, and crack weak HMAC secrets.
+8. `audit_secret_leak`: Discover `.env`, heapdumps, `.git`, and high-entropy API keys.
+9. `audit_ai_code_security`: Calculate AST Tree Coverage and Taint Reachability risk scores.
+10. `verify_bola`: Mathematically prove IDOR vulnerabilities with 3-Way Differential Oracle.
+11. `verify_bfla`: Verify administrative privilege escalations across roles.
+12. `generate_poc`: Generate zero-dependency reproducible Python exploit scripts.
+13. `generate_patch`: Generate unified git diff patches and mitigation recommendations.
+14. `run_benchmark`: Execute the 30-case evaluation harness against the target.
+
+---
+
+## 🐧 Cross-Platform Deployment (Kali Linux / Ubuntu / Windows)
+
+The system features an adaptive execution engine:
+- **Core Engine (Pure Python)**: Runs identically across **Kali Linux**, **Ubuntu**, and **Windows** without requiring system-level packages. HTTPX, SQLite, NetworkX, and AST analysis are 100% OS-agnostic.
+- **External CLI Tools (`KaliCommandRunner`)**: Automatically detects tools (`nmap`, `ffuf`, `nuclei`) via `shutil.which()`.
+  - On **Kali Linux**: Uses installed high-speed binaries with structured XML/JSON parsing.
+  - On **Ubuntu / Windows**: Seamlessly falls back to internal pure-Python discovery (`SPADynamicCrawler`, `SASTBridgeRouteExtractor`) without crashing or requiring manual configuration.
 
 ---
 
@@ -99,4 +156,4 @@ All deep technical specifications and operating instructions are documented in:
 - `.context/FLOW.md`: End-to-end 4-phase operational workflow and Mermaid sequence diagrams.
 - `.context/MODULES.md`: Detailed module contracts and interface specifications.
 - `.context/ORCHESTRATION.md`: Multi-agent pairing between Antigravity (Architect) and GitHub Copilot (Coder).
-- `ssdlc-agentic-spec/`: 8 full specification RFCs and 5 Architecture Decision Records (ADRs).
+- `ssdlc-agentic-spec/`: 8 full specification RFCs and Architecture Decision Records (ADRs).

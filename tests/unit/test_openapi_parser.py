@@ -3,9 +3,8 @@
 import json
 from pathlib import Path
 
-from agentic_pentest.infrastructure.discovery.openapi_parser import OpenAPIParser
-
 from agentic_pentest.domain.entities import HTTPMethod
+from agentic_pentest.infrastructure.discovery.openapi_parser import OpenAPIParser
 
 
 def test_parse_crapi_openapi_spec() -> None:

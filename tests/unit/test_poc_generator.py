@@ -3,7 +3,6 @@
 from datetime import UTC, datetime
 
 from agentic_pentest.application.use_cases.generate_poc import PoCGenerator
-
 from agentic_pentest.domain.entities import (
     DifferentialTriplet,
     Finding,

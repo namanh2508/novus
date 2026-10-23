@@ -51,7 +51,9 @@ async def test_spa_crawler_extracts_endpoints_from_html_and_js() -> None:
         body: str | None = None,
         principal: Any = None,
     ) -> tuple[HTTPRequestObservation, HTTPResponseObservation]:
-        req = HTTPRequestObservation(method=HTTPMethod.GET, url=url, headers=headers or {}, body=None)
+        req = HTTPRequestObservation(
+            method=HTTPMethod.GET, url=url, headers=headers or {}, body=None
+        )
         if url == "http://localhost:8888":
             resp = HTTPResponseObservation(
                 status_code=200, headers={}, body=html_payload, latency_ms=10, body_sha256="h1"
