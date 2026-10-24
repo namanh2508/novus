@@ -135,9 +135,10 @@ def test_generate_multi_language_pocs() -> None:
 
     # 4. generate_all_pocs
     all_pocs = generator.generate_all_pocs(finding)
-    assert set(all_pocs.keys()) == {"python", "urllib", "curl", "go", "node"}
+    assert set(all_pocs.keys()) == {"python", "urllib", "curl", "go", "node", "raw_http"}
     assert "requests.request" in all_pocs["python"]
     assert "urllib.request" in all_pocs["urllib"]
+    assert "POST /identity/api/v2/vehicle/v123/reset HTTP/1.1" in all_pocs["raw_http"]
 
     # 5. Pure stdlib urllib PoC direct
     urllib_code = generator.generate_urllib_poc(finding)
