@@ -76,6 +76,15 @@ def test_chat_session_commands() -> None:
     assert session.pixel_mode
     session.toggle_pixel()
     assert not session.pixel_mode
+    assert session.show_toolbar
+    tb_active = session._get_bottom_toolbar()
+    assert "navigate" in tb_active.value
+    session.toggle_toolbar()
+    assert not session.show_toolbar
+    tb_disabled = session._get_bottom_toolbar()
+    assert tb_disabled.value == ""
+    session.toggle_toolbar()
+    assert session.show_toolbar
 
 
 def test_mascot_table_rendering() -> None:
