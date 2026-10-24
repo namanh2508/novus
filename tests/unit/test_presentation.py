@@ -213,3 +213,20 @@ def test_live_demo_server_bola_token_enforcement() -> None:
             assert "location" in data
     finally:
         server.shutdown()
+
+
+def test_checkpoint_save_and_resume() -> None:
+    session = InteractiveChatSession(target_url="http://test.local:8888")
+    session.permission_mode = "strict"
+    cp_path = session.save_checkpoint("test_unit_checkpoint")
+    assert cp_path.exists()
+
+    session_resumed = InteractiveChatSession(target_url="http://other.url")
+    ok = session_resumed.resume_checkpoint("test_unit_checkpoint")
+    assert ok is True
+    assert session_resumed.target_url == "http://test.local:8888"
+    assert session_resumed.permission_mode == "strict"
+
+    # Cleanup test checkpoint
+    if cp_path.exists():
+        cp_path.unlink()
