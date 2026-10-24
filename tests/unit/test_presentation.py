@@ -7,9 +7,10 @@ import urllib.error
 import urllib.request
 
 import pytest
+from rich.console import Console
 from typer.testing import CliRunner
 
-from agentic_pentest.presentation.banner_art import render_mascot_table
+from agentic_pentest.presentation.banner_art import animate_mascot_banner, render_mascot_table
 from agentic_pentest.presentation.chat import InteractiveChatSession
 from agentic_pentest.presentation.cli import app
 from agentic_pentest.presentation.demo_server import start_live_demo_server
@@ -80,6 +81,21 @@ def test_mascot_table_rendering() -> None:
     table_compact = render_mascot_table(compact=True)
     assert table_compact is not None
     assert len(table_compact.rows) == 4
+
+    # Test animation non-interactive / compact fallback execution
+    test_console = Console(force_terminal=False)
+    animate_mascot_banner(console=test_console, compact=True)
+    animate_mascot_banner(console=test_console, compact=False)
+
+
+def test_chat_session_bottom_toolbar() -> None:
+    session = InteractiveChatSession(target_url="http://localhost:8888")
+    toolbar = session._get_bottom_toolbar()
+    assert "Navigate" in toolbar.value
+    assert "Select" in toolbar.value
+    assert "Complete" in toolbar.value
+    assert "Cancel" in toolbar.value
+    assert "Safe: ON" in toolbar.value
 
 
 def test_live_demo_server_bola_token_enforcement() -> None:
