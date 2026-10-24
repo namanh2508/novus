@@ -33,3 +33,10 @@
 | **T-022** | Scale | Threat Intel & Multi-Target Swarm Workers | DONE | T-005 | 2d | `src/agentic_pentest/application/orchestration/swarm_orchestrator.py` | Bounded concurrent audit of 10+ endpoints with graph lock (COMPLETED) |
 | **T-023** | Operator UI | Rich TUI Canvas & SARIF 2.1.0 with CVSS v3.1 | DONE | T-013,T-014 | 2d | `src/agentic_pentest/presentation/tui/terminal_canvas.py` | Live terminal DAG cards, telemetry gauges, and CVSS metadata (COMPLETED) |
 | **T-024** | Resilience | Tool-Call Repair, Net Policy & Semantic Grepper | DONE | T-001 | 2d | `src/agentic_pentest/infrastructure/reasoning/tool_call_repair.py` | Deterministic JSON repair, RFC1918 scope, and source grepper (COMPLETED) |
+| **T-025** | Verification | Multi-Agent Consensus Voting Engine & Domain Veto | DONE | T-009 | 2d | `src/agentic_pentest/application/orchestration/consensus_verifier.py` | 3 subagents, 2/3 consensus, domain invariant veto for BOLA/BFLA (COMPLETED) |
+| **T-026** | Hermetic CI | Offline VCR / HAR Cassette Recorder & Replay | DONE | T-007 | 2d | `src/agentic_pentest/infrastructure/executors/vcr_recorder.py` | Hermetic execution without live network/container dependency (COMPLETED) |
+| **T-027** | Governance | HITL Checkpoint `/save` & `/resume` + Approval Gate | DONE | T-014 | 2d | `src/agentic_pentest/presentation/chat.py` | Session rollback, state export, mutating confirmation gate (COMPLETED) |
+| **T-028** | Benchmark | 41-Case Eval Dataset, Gold Labels & SE373 Deliverables | DONE | T-015 | 3d | `evals/questions/questions.jsonl`, `docs/DEMO_SCRIPT.md` | Full 41 cases (36 func + 5 sec), gold labels, 15-min demo script (COMPLETED) |
+| **T-029** | Safety | Enterprise Rules of Engagement & Rate Limiting Guard | DONE | T-007 | 2d | `src/agentic_pentest/domain/safety/rules_of_engagement.py` | Pre-flight path blocker, token bucket rate limiter, RoEViolationError (COMPLETED) |
+| **T-030** | Intelligence | Coverage Ledger, RFC 7230 Raw PoC & Dead-End Pruner | DONE | T-010,T-012 | 2d | `src/agentic_pentest/domain/coverage_ledger.py` | Attack surface audit ledger, 6-format PoC, automated DAG backtracking (COMPLETED) |
+
