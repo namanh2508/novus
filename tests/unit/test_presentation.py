@@ -87,6 +87,74 @@ def test_chat_session_commands() -> None:
     assert session.show_toolbar
 
 
+@pytest.mark.asyncio
+async def test_chat_session_model_and_ssrf() -> None:
+    session = InteractiveChatSession(target_url="http://127.0.0.1:8888")
+    # 1. Model check executes and renders diagnostic table
+    await session.check_model()
+
+    # 2. SSRF audit runs against mock endpoint without unhandled exceptions
+    await session.audit_ssrf("/community/api/v2/coupon/new-coupon")
+
+    # 3. Add dummy finding and test multi-format PoCs
+    from datetime import UTC, datetime
+
+    from agentic_pentest.domain.entities import (
+        DifferentialTriplet,
+        Finding,
+        HTTPMethod,
+        HTTPRequestObservation,
+        HTTPResponseObservation,
+        Severity,
+        TargetObject,
+        VulnerabilityCategory,
+    )
+
+    now = datetime.now(UTC)
+    obj = TargetObject(id="o1", type_name="vehicle", owner_principal_id="alice", value="v123")
+    req = HTTPRequestObservation(
+        method=HTTPMethod.GET,
+        url="http://127.0.0.1:8888/identity/api/v2/vehicle/v123/location",
+        headers={"Authorization": "Bearer token_bob"},
+        body=None,
+        timestamp=now,
+    )
+    resp = HTTPResponseObservation(
+        status_code=200,
+        headers={"Content-Type": "application/json"},
+        body='{"vehicle_id": "v123"}',
+        latency_ms=20,
+        body_sha256="sha",
+        timestamp=now,
+    )
+    triplet = DifferentialTriplet(
+        baseline_legitimate=(req, resp),
+        cross_principal_test=(req, resp),
+        unauthenticated_control=(req, resp),
+    )
+    f = Finding(
+        id="FINDING-PRES-01",
+        category=VulnerabilityCategory.BOLA,
+        severity=Severity.HIGH,
+        title="Test BOLA",
+        endpoint_url="http://127.0.0.1:8888/identity/api/v2/vehicle/v123/location",
+        method=HTTPMethod.GET,
+        target_object=obj,
+        attacker_principal=session.bob,
+        triplet=triplet,
+        verification_proof="Verified invariant breach",
+        created_at=now,
+    )
+    session.findings.append(f)
+
+    # Test each language generator
+    session.show_poc("curl")
+    session.show_poc("go")
+    session.show_poc("node")
+    session.show_poc("all")
+    session.show_poc("python")
+
+
 def test_mascot_table_rendering() -> None:
     table_sleek = render_mascot_table(compact=False)
     assert table_sleek is not None
