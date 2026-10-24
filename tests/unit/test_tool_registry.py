@@ -70,6 +70,7 @@ def test_registry_registers_core_suite() -> None:
     assert "mutate_parameter" in tool_names
     assert "dynamic_auth" in tool_names
     assert "dynamic_harvester" in tool_names
+    assert "load_skill" in tool_names
 
 
 def test_registry_mcp_specs_compliance() -> None:
