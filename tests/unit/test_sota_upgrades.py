@@ -176,3 +176,35 @@ def test_waf_evasion_mutator_detection_and_payloads() -> None:
     # 5. Full jitter backoff delay within bounds
     delay = mutator.calculate_backoff_delay(attempt=3, base_delay=1.0, max_delay=10.0)
     assert 0.5 <= delay <= 10.0
+
+
+def test_slash_completer_suggestions() -> None:
+    from prompt_toolkit.document import Document
+
+    from agentic_pentest.presentation.chat import PentestSlashCompleter
+
+    completer = PentestSlashCompleter()
+
+    # Test /ch completion suggests /chain
+    doc_ch = Document(text="/ch", cursor_position=3)
+    completions_ch = list(completer.get_completions(doc_ch))
+    texts_ch = [c.text for c in completions_ch]
+    assert "/chain" in texts_ch
+
+    # Test /st completion suggests /stateful
+    doc_st = Document(text="/st", cursor_position=3)
+    completions_st = list(completer.get_completions(doc_st))
+    texts_st = [c.text for c in completions_st]
+    assert "/stateful" in texts_st
+
+    # Test /wa completion suggests /waf
+    doc_wa = Document(text="/wa", cursor_position=3)
+    completions_wa = list(completer.get_completions(doc_wa))
+    texts_wa = [c.text for c in completions_wa]
+    assert "/waf" in texts_wa
+
+    # Test /dash completion suggests /dashboard
+    doc_dash = Document(text="/dash", cursor_position=5)
+    completions_dash = list(completer.get_completions(doc_dash))
+    texts_dash = [c.text for c in completions_dash]
+    assert "/dashboard" in texts_dash
