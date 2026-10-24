@@ -39,4 +39,8 @@
 | **T-028** | Benchmark | 41-Case Eval Dataset, Gold Labels & SE373 Deliverables | DONE | T-015 | 3d | `evals/questions/questions.jsonl`, `docs/DEMO_SCRIPT.md` | Full 41 cases (36 func + 5 sec), gold labels, 15-min demo script (COMPLETED) |
 | **T-029** | Safety | Enterprise Rules of Engagement & Rate Limiting Guard | DONE | T-007 | 2d | `src/agentic_pentest/domain/safety/rules_of_engagement.py` | Pre-flight path blocker, token bucket rate limiter, RoEViolationError (COMPLETED) |
 | **T-030** | Intelligence | Coverage Ledger, RFC 7230 Raw PoC & Dead-End Pruner | DONE | T-010,T-012 | 2d | `src/agentic_pentest/domain/coverage_ledger.py` | Attack surface audit ledger, 6-format PoC, automated DAG backtracking (COMPLETED) |
+| **T-031** | Observability | OpenTelemetry Execution Tracer & Cost Accounting | DONE | T-001 | 2d | `src/agentic_pentest/domain/telemetry/tracer.py` | Nanosecond spans, token tracker, dynamic model pricing, budget alert (COMPLETED) |
+| **T-032** | Compliance | OWASP API Top 10 & MITRE ATT&CK Threat Matrix | DONE | T-001 | 2d | `src/agentic_pentest/domain/safety/threat_matrix.py` | Full taxonomy mapping: OWASP API 2023, MITRE ATT&CK, CWE & CVSS v3.1 (COMPLETED) |
+| **T-033** | Orchestration | 6-Stage Attack Chain Lifecycle State Machine | DONE | T-012 | 2d | `src/agentic_pentest/application/orchestration/attack_chain.py` | Finite state machine with stage invariants and rollback safety (COMPLETED) |
+
 
