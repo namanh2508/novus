@@ -114,7 +114,7 @@ async def test_execute_attack_chain(tmp_path: Path) -> None:
         status_code=200,
         headers={"Content-Type": "application/json"},
         body='{"lat": 12.34}',
-        latency_ms=25.0,
+        latency_ms=25,
         body_sha256="sha256",
         timestamp=now,
     )
@@ -179,11 +179,10 @@ async def test_chat_run_autonomous_mission(tmp_path: Path, monkeypatch: pytest.M
     session.autonomous_orchestrator.output_dir = tmp_path
 
     # Mock reachability check to simulate open port
-    monkeypatch.setattr(
-        TargetInfo,
-        "check_tcp_reachability",
-        lambda self, timeout_seconds=1.5: (True, "Port open"),
-    )
+    def _mock_reachability(self: TargetInfo, timeout_seconds: float = 1.5) -> tuple[bool, str]:
+        return True, "Port open"
+
+    monkeypatch.setattr(TargetInfo, "check_tcp_reachability", _mock_reachability)
 
     # Mock tool calls for fast execution
     for tool in session.tool_registry.list_tools():

@@ -5,7 +5,7 @@ from agentic_pentest.domain.invariants import (
 )
 
 
-def test_is_semantic_error_response_json():
+def test_is_semantic_error_response_json() -> None:
     # 200 OK with explicit error in JSON
     body1 = '{"status": "error", "message": "unauthorized access to object"}'
     assert is_semantic_error_response(200, body1) is True
@@ -19,12 +19,12 @@ def test_is_semantic_error_response_json():
     assert is_semantic_error_response(200, body3) is False
 
 
-def test_is_semantic_error_response_html():
+def test_is_semantic_error_response_html() -> None:
     body_html = "<html><head><title>Access Denied</title></head><body>Forbidden</body></html>"
     assert is_semantic_error_response(200, body_html) is True
 
 
-def test_check_bola_invariant_rejects_fake_200_ok():
+def test_check_bola_invariant_rejects_fake_200_ok() -> None:
     # Cross status is 200, but body contains semantic error
     cross_body_error = '{"status": "error", "message": "Access denied"}'
     legit_body = '{"id": "v1", "location": "secret_spot"}'
@@ -42,7 +42,7 @@ def test_check_bola_invariant_rejects_fake_200_ok():
     assert "semantic denial" in verdict.rationale.lower() or "blocked" in verdict.rationale.lower()
 
 
-def test_check_bfla_invariant_rejects_semantic_error():
+def test_check_bfla_invariant_rejects_semantic_error() -> None:
     error_body = '{"code": 403, "error": "forbidden action"}'
     verdict = check_bfla_invariant(
         required_role="ADMIN",

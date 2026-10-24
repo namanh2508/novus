@@ -73,3 +73,14 @@ def test_parse_nuclei_jsonl() -> None:
     assert findings[0]["template_id"] == "cors-misconfig"
     assert findings[0]["severity"] == "medium"
     assert findings[1]["template_id"] == "exposed-swagger"
+
+
+def test_discover_installed_tools() -> None:
+    from agentic_pentest.infrastructure.tools_kali.structured_bridge import KaliCommandRunner
+
+    tools = KaliCommandRunner.discover_installed_tools()
+    assert "nmap" in tools
+    assert "ffuf" in tools
+    assert "sqlmap" in tools
+    assert "purpose" in tools["nmap"]
+    assert "installed" in tools["nmap"]

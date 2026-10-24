@@ -1,7 +1,7 @@
 from agentic_pentest.domain.deception_guard import DeceptionGuard
 
 
-def test_deception_guard_detects_canary_domain():
+def test_deception_guard_detects_canary_domain() -> None:
     guard = DeceptionGuard()
     res = guard.analyze_target("http://test.canarytokens.org/auth/token")
     assert res.is_deception is True
@@ -9,14 +9,14 @@ def test_deception_guard_detects_canary_domain():
     assert any("canarytokens.org" in ind for ind in res.detected_indicators)
 
 
-def test_deception_guard_detects_honeypot_path():
+def test_deception_guard_detects_honeypot_path() -> None:
     guard = DeceptionGuard()
     res = guard.analyze_target("http://127.0.0.1:8888/honey/login")
     assert res.is_deception is True
     assert any("Honeypot URI Pattern" in ind for ind in res.detected_indicators)
 
 
-def test_deception_guard_detects_canary_headers():
+def test_deception_guard_detects_canary_headers() -> None:
     guard = DeceptionGuard()
     res = guard.analyze_target(
         "http://127.0.0.1:8888/api/v1/user",
@@ -26,14 +26,14 @@ def test_deception_guard_detects_canary_headers():
     assert any("Canary Tripwire Header" in ind for ind in res.detected_indicators)
 
 
-def test_deception_guard_allows_safe_targets():
+def test_deception_guard_allows_safe_targets() -> None:
     guard = DeceptionGuard()
     res = guard.analyze_target("http://127.0.0.1:8888/identity/api/v2/vehicle")
     assert res.is_deception is False
     assert res.risk_level == "SAFE"
 
 
-def test_deception_guard_filters_endpoints():
+def test_deception_guard_filters_endpoints() -> None:
     guard = DeceptionGuard()
     endpoints = [
         "http://127.0.0.1:8888/api/v1/user",
