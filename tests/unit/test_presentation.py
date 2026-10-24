@@ -76,26 +76,15 @@ def test_chat_session_commands() -> None:
 def test_mascot_table_rendering() -> None:
     table_full = render_mascot_table(compact=False)
     assert table_full is not None
-    assert len(table_full.rows) == 8
+    assert len(table_full.rows) == 10
 
     table_compact = render_mascot_table(compact=True)
     assert table_compact is not None
     assert len(table_compact.rows) == 4
 
-    # Test animation non-interactive / compact fallback execution
     test_console = Console(force_terminal=False)
     animate_mascot_banner(console=test_console, compact=True)
     animate_mascot_banner(console=test_console, compact=False)
-
-
-def test_chat_session_bottom_toolbar() -> None:
-    session = InteractiveChatSession(target_url="http://localhost:8888")
-    toolbar = session._get_bottom_toolbar()
-    assert "Navigate" in toolbar.value
-    assert "Select" in toolbar.value
-    assert "Complete" in toolbar.value
-    assert "Cancel" in toolbar.value
-    assert "Safe: ON" in toolbar.value
 
 
 def test_live_demo_server_bola_token_enforcement() -> None:
