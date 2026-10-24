@@ -65,11 +65,11 @@ def test_chat_session_commands() -> None:
     session.show_findings()
     session.show_poc()
     session.show_banner()
-    assert session.compact_mode is False
-    session.toggle_compact()
     assert session.compact_mode is True
     session.toggle_compact()
     assert session.compact_mode is False
+    session.toggle_compact()
+    assert session.compact_mode is True
 
 
 def test_mascot_table_rendering() -> None:
