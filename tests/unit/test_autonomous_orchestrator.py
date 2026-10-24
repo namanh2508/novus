@@ -57,7 +57,8 @@ def test_target_info_parsing_variations() -> None:
     assert t4.base_url == "https://api.example.com"
 
 
-def test_synthesize_attack_chain_plan(tmp_path: Path) -> None:
+@pytest.mark.asyncio
+async def test_synthesize_attack_chain_plan(tmp_path: Path) -> None:
     executor = HTTPXExecutor()
     registry = PentestToolRegistry(executor)
     orchestrator = AutonomousAttackOrchestrator(
@@ -66,7 +67,7 @@ def test_synthesize_attack_chain_plan(tmp_path: Path) -> None:
         output_dir=str(tmp_path / "attack_chains"),
     )
 
-    plan = orchestrator.synthesize_attack_chain_plan(
+    plan = await orchestrator.synthesize_attack_chain_plan(
         target_str="http://127.0.0.1:8888",
         user_objective="Verify crAPI BOLA and Security Headers",
     )
@@ -75,14 +76,25 @@ def test_synthesize_attack_chain_plan(tmp_path: Path) -> None:
     assert len(plan.nodes) >= 6
     assert plan.json_path.exists()
     assert plan.md_path.exists()
+    assert len(plan.strategic_assessment) > 0
 
     plan_dict = plan.to_dict()
     assert plan_dict["chain_id"] == plan.chain_id
     assert plan_dict["total_nodes"] == len(plan.nodes)
+    assert "strategic_assessment" in plan_dict
 
     md_text = plan.render_markdown()
     assert "# Attack Chain Plan" in md_text
     assert "STEP-01" in md_text
+    assert "Autonomous Supervisor Strategic Assessment" in md_text
+
+
+def test_target_tcp_reachability_and_fast_fail() -> None:
+    # 1. Unreachable port (e.g. localhost on an unlikely closed port)
+    target_dead = TargetInfo.parse("127.0.0.1:59999")
+    is_reachable, reason = target_dead.check_tcp_reachability(timeout_seconds=0.3)
+    assert not is_reachable
+    assert "Connection refused" in reason or "timed out" in reason or "error" in reason.lower()
 
 
 @pytest.mark.asyncio
@@ -142,7 +154,7 @@ async def test_execute_attack_chain(tmp_path: Path) -> None:
         output_dir=str(tmp_path / "attack_chains"),
     )
 
-    plan = orchestrator.synthesize_attack_chain_plan(
+    plan = await orchestrator.synthesize_attack_chain_plan(
         target_str="http://127.0.0.1:8888",
     )
 
@@ -161,10 +173,17 @@ async def test_execute_attack_chain(tmp_path: Path) -> None:
 
 
 @pytest.mark.asyncio
-async def test_chat_run_autonomous_mission(tmp_path: Path) -> None:
+async def test_chat_run_autonomous_mission(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     session = InteractiveChatSession(target_url="http://127.0.0.1:8888")
     # Redirect output directory to tmp_path
     session.autonomous_orchestrator.output_dir = tmp_path
+
+    # Mock reachability check to simulate open port
+    monkeypatch.setattr(
+        TargetInfo,
+        "check_tcp_reachability",
+        lambda self, timeout_seconds=1.5: (True, "Port open"),
+    )
 
     # Mock tool calls for fast execution
     for tool in session.tool_registry.list_tools():
@@ -175,7 +194,19 @@ async def test_chat_run_autonomous_mission(tmp_path: Path) -> None:
         objective="Automated Test",
     )
 
+    assert report is not None
     assert report.completed_steps == len(report.findings) + (
         report.total_steps - len(report.findings)
     )
     assert session.target_url == "http://127.0.0.1:8888"
+
+
+@pytest.mark.asyncio
+async def test_chat_run_autonomous_mission_unreachable_fast_fail() -> None:
+    session = InteractiveChatSession()
+    # Unreachable target returns None immediately without running tools
+    report = await session.run_autonomous_mission(
+        target_input="192.168.1.50:59999",
+        objective="Fast fail test",
+    )
+    assert report is None
