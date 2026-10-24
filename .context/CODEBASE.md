@@ -9,56 +9,66 @@ src/agentic_pentest/
 ├── __init__.py
 ├── domain/                          # LAYER 1: PURE DOMAIN
 │   ├── __init__.py
-│   ├── entities.py                  # Core entities: Principal, Object, Finding
-│   ├── invariants.py                # Mathematical rules: SemanticDiff, TokenEntropy
+│   ├── entities.py                  # Core entities: Principal, Object, Finding, AgentTurn
+│   ├── invariants.py                # Mathematical rules: SemanticDiff, SSRF, TOCTOU, JWT
+│   ├── mutation.py                  # Polymorphic mutator
+│   ├── denoiser.py                  # Advanced fuzzy entropy denoiser
+│   ├── deception_guard.py           # Canarytokens & Honeypot detection
+│   ├── safety/                      # Scope and network perimeter safety
+│   │   ├── __init__.py
+│   │   └── net_policy.py            # NetworkScopePolicy (CIDR scope guard, URL redactor)
 │   └── exceptions.py                # Typed domain exceptions
 │
-├── application/                     # LAYER 2: APPLICATION USE CASES
+├── application/                     # LAYER 2: APPLICATION USE CASES & ORCHESTRATION
 │   ├── __init__.py
 │   ├── interfaces/                  # Abstract protocols (Dependency Inversion)
-│   │   ├── __init__.py
-│   │   ├── executor.py              # IHttpExecutor protocol
-│   │   ├── planner.py               # IAdaptivePlanner protocol
-│   │   ├── verifier.py              # IIndependentVerifier protocol
-│   │   └── store.py                 # IEvidenceGraphStore protocol
-│   ├── use_cases/
-│   │   ├── __init__.py
-│   │   ├── plan_next_action.py      # PlanNextActionUseCase
-│   │   ├── execute_safe_action.py   # ExecuteSafeActionUseCase (with shadow copy)
-│   │   ├── verify_differential.py   # VerifyDifferentialUseCase (3-way oracle)
-│   │   ├── generate_poc.py          # GeneratePocUseCase
-│   │   └── export_sarif.py          # ExportSarifUseCase
+│   ├── orchestration/
+│   │   ├── dual_brain_router.py     # System 1 / System 2 confidence router
+│   │   ├── context_compactor.py     # microCompact sliding window (<16k tokens)
+│   │   ├── background_dreamer.py    # autoDream offline heuristic consolidation
+│   │   ├── swarm_orchestrator.py    # Bounded parallel worker pool with graph locks
+│   │   ├── autonomous_orchestrator.py
+│   │   ├── dynamic_auth.py
+│   │   └── dynamic_harvester.py
+│   └── use_cases/
+│       ├── tool_registry.py         # PentestToolRegistry (MCP compliant)
+│       ├── verify_differential.py   # VerifyDifferentialUseCase (3-way oracle)
+│       ├── generate_poc.py          # Standalone PoC Generator (Python, urllib, cURL, Go, Node)
+│       └── export_sarif.py          # SARIF 2.1.0 with CVSS v3.1 vector calculations
 │
-├── infrastructure/                  # LAYER 3: ADAPTERS & IMPLEMENTATIONS
+├── infrastructure/                  # LAYER 3: ADAPTERS & DRIVERS
 │   ├── __init__.py
 │   ├── discovery/
-│   │   ├── __init__.py
-│   │   └── openapi_parser.py        # OpenApiSchemaParser (extracts paths & schemas)
-│   ├── executors/
-│   │   ├── __init__.py
-│   │   ├── httpx_executor.py        # HttpxExecutorAdapter (async HTTP engine)
-│   │   ├── playwright_sandbox.py    # PlaywrightBrowserSandbox (DOM / browser state)
-│   │   └── shadow_cloner.py         # ShadowObjectCloner (idempotent rollback)
-│   ├── storage/
-│   │   ├── __init__.py
-│   │   ├── networkx_graph.py        # NetworkXEvidenceGraphAdapter
-│   │   └── sqlite_audit_store.py    # SqliteAuditStoreAdapter (immutable trace log)
+│   │   ├── openapi_parser.py        # OpenAPI spec parser
+│   │   ├── openapi_reconstructor.py # Reverse engineers OpenAPI 3.0 from traffic
+│   │   ├── osint_scanner.py         # Subdomain, S3/GCS bucket leak, CNAME takeover
+│   │   ├── semantic_grepper.py      # Semantic code triage (jevgrep pattern)
+│   │   ├── threat_intel_bridge.py   # Cyberspace search (FOFA, Quake, Hunter, Shodan)
+│   │   └── playwright_crawler.py    # Headless crawler with anti-bot stealth
+│   ├── proxy/
+│   │   ├── proxy_rotator.py         # Dynamic multi-protocol proxy rotation & quarantine
+│   │   ├── ip_reputation.py         # Egress IP verification & leak detection
+│   │   └── interception_dashboard.py# Port 8090 real-time SSE packet dashboard
 │   ├── reasoning/
-│   │   ├── __init__.py
-│   │   ├── litellm_client.py        # LiteLLMReasoningClient (structured prompt calling)
-│   │   └── prompt_templates.py      # Jinja2 prompt rendering engine
-│   └── playbooks/
-│       ├── __init__.py
-│       ├── registry.py              # PlaybookRegistry (loads WSTG YAML specs)
-│       └── data/                    # Bundled executable playbooks
-│           ├── bola_read.yaml
-│           ├── bola_write.yaml
-│           └── bfla_admin.yaml
+│   │   ├── jev_decision_engine.py   # Jev/Laya System 1 engine + injection sanitizer
+│   │   ├── tool_call_repair.py      # Deterministic JSON repair (openclaw pattern)
+│   │   └── litellm_client.py        # System 2 LiteLLM adapter (Claude/GPT/DeepSeek)
+│   ├── storage/
+│   │   ├── networkx_graph.py        # In-memory Evidence Graph adapter
+│   │   ├── sqlite_audit_store.py    # WAL-mode persistent audit trail
+│   │   ├── episodic_knowledge.py    # Cross-engagement durable heuristic database
+│   │   └── sqlite_session_store.py  # Checkpoint & turn persistence
+│   └── tools_kali/
+│       └── structured_bridge.py     # PATH-discovery of 100+ OS pentest tools
 │
-└── presentation/                    # LAYER 4: USER INTERFACE & CI RUNNER
+└── presentation/                    # LAYER 4: OPERATOR INTERFACE & REPORTING
     ├── __init__.py
     ├── cli.py                       # Typer CLI application (`agentic-pentest run`)
-    └── ci_gate.py                   # GitHub Actions PR Gate entrypoint
+    ├── chat.py                      # Interactive Cyber-Whale shell with slash commands
+    ├── sarif_exporter.py            # SARIF 2.1.0 presentation exporter
+    └── tui/
+        ├── __init__.py
+        └── terminal_canvas.py       # Rich interactive terminal DAG & telemetry canvas
 ```
 
 ---
