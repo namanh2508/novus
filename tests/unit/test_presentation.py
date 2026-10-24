@@ -154,6 +154,13 @@ async def test_chat_session_model_and_ssrf() -> None:
     session.show_poc("all")
     session.show_poc("python")
 
+    # 4. Test fuzzing and exploit guides
+    await session.audit_fuzz()
+    session.show_exploit_guide()
+    session.show_exploit_guide("memory")
+    session.show_exploit_guide("mitigations")
+    session.show_exploit_guide("tools")
+
 
 def test_mascot_table_rendering() -> None:
     table_sleek = render_mascot_table(compact=False)
