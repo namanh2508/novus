@@ -79,17 +79,22 @@ def test_chat_session_commands() -> None:
 
 
 def test_mascot_table_rendering() -> None:
-    table_pixel = render_mascot_table(compact=False)
-    assert table_pixel is not None
-    assert len(table_pixel.rows) == 10
+    table_sleek = render_mascot_table(compact=False)
+    assert table_sleek is not None
+    assert len(table_sleek.rows) == 4
 
     table_compact = render_mascot_table(compact=True)
     assert table_compact is not None
-    assert len(table_compact.rows) == 4
+    assert len(table_compact.rows) == 3
+
+    table_pixel = render_mascot_table(pixel_mode=True)
+    assert table_pixel is not None
+    assert len(table_pixel.rows) == 10
 
     test_console = Console(force_terminal=False)
     animate_mascot_banner(console=test_console, compact=True)
     animate_mascot_banner(console=test_console, compact=False)
+    animate_mascot_banner(console=test_console, pixel_mode=True)
 
 
 def test_live_demo_server_bola_token_enforcement() -> None:
