@@ -68,6 +68,8 @@ def test_registry_registers_core_suite() -> None:
     assert "verify_bfla" in tool_names
     assert "verify_bopla" in tool_names
     assert "mutate_parameter" in tool_names
+    assert "dynamic_auth" in tool_names
+    assert "dynamic_harvester" in tool_names
 
 
 def test_registry_mcp_specs_compliance() -> None:
