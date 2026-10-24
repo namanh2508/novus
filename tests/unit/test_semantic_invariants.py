@@ -1,6 +1,9 @@
 from agentic_pentest.domain.invariants import (
     check_bfla_invariant,
     check_bola_invariant,
+    check_jwt_key_confusion_invariant,
+    check_race_condition_toctou_invariant,
+    check_ssrf_metadata_invariant,
     is_semantic_error_response,
 )
 
@@ -51,3 +54,44 @@ def test_check_bfla_invariant_rejects_semantic_error() -> None:
         response_body=error_body,
     )
     assert verdict.is_vulnerable is False
+
+
+def test_check_ssrf_metadata_invariant() -> None:
+    # AWS metadata response
+    aws_body = '{"ami-id": "ami-12345678", "instance-id": "i-0abcdef1234567890"}'
+    v_aws = check_ssrf_metadata_invariant(200, aws_body)
+    assert v_aws.is_vulnerable is True
+    assert "INV_SSRF_NETWORK_ISOLATION" in v_aws.violated_invariants
+
+    # Non-metadata safe response
+    safe_body = '{"status": "ok", "message": "image converted successfully"}'
+    v_safe = check_ssrf_metadata_invariant(200, safe_body)
+    assert v_safe.is_vulnerable is False
+
+    # Blocked 403
+    v_blocked = check_ssrf_metadata_invariant(403, "Forbidden")
+    assert v_blocked.is_vulnerable is False
+
+
+def test_check_race_condition_toctou_invariant() -> None:
+    # 5 concurrent requests: 3 succeeded (should fail invariant if max=1)
+    statuses_vuln = [200, 200, 200, 400, 400]
+    v_race = check_race_condition_toctou_invariant(statuses_vuln, max_allowed_success=1)
+    assert v_race.is_vulnerable is True
+    assert "INV_ATOMIC_STATE_TRANSITION" in v_race.violated_invariants
+
+    # Only 1 succeeded -> invariant held
+    statuses_safe = [200, 400, 400, 400, 400]
+    v_safe = check_race_condition_toctou_invariant(statuses_safe, max_allowed_success=1)
+    assert v_safe.is_vulnerable is False
+
+
+def test_check_jwt_key_confusion_invariant() -> None:
+    # Alg: none accepted
+    v_none = check_jwt_key_confusion_invariant(200, '{"data": "secret"}', attack_type="alg_none")
+    assert v_none.is_vulnerable is True
+    assert "INV_CRYPTOGRAPHIC_INTEGRITY" in v_none.violated_invariants
+
+    # Tampered rejected with 401
+    v_rej = check_jwt_key_confusion_invariant(401, '{"error": "invalid signature"}')
+    assert v_rej.is_vulnerable is False

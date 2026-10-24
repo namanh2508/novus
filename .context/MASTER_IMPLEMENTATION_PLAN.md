@@ -51,18 +51,18 @@ The mission of this repository is to build an **Evidence-Guided, Autonomous Agen
 
 | Source Repository | Core Module / Technology | Target Integration in `agentic_pentest` | Implementation Status |
 | :--- | :--- | :--- | :--- |
-| **`oh-my-pi`** | `packages/snapcompact` | `application/orchestration/context_compactor.py`: Sliding-window snapshot compaction of HTTP evidence without losing raw bytes. | Planned |
-| | `packages/tui` | `presentation/tui/`: Rich interactive terminal interface with live execution cards, progress bars, and hotkeys. | Planned |
-| | `crates/pi-ast` | `infrastructure/discovery/sast_bridge.py`: Rapid AST regex extraction for endpoint controllers and route decorators. | Implemented |
-| **`openclaw`** | `packages/worker-runtime` | `infrastructure/executors/worker_runtime.py`: Process isolation and memory heap management for long-running pentest campaigns. | Planned |
-| | `packages/tool-call-repair` | `infrastructure/reasoning/tool_call_repair.py`: Deterministic recovery and JSON syntax repair for malformed model outputs. | Planned |
-| | `packages/net-policy` | `domain/safety/net_policy.py`: IP/CIDR scope boundary enforcement and forbidden private network tripwires. | Implemented |
-| **`opencode`** | `packages/http-recorder` | `infrastructure/interception/http_recorder.py`: Bit-for-bit HTTP request/response journaling for deterministic PoC replay. | Planned |
-| | `packages/effect-drizzle-sqlite` | `infrastructure/storage/sqlite_session_store.py`: Transactional SQLite persistence with schema migrations. | Implemented |
-| **`hermes-agent`** | `hermes_state_wal.py` | `infrastructure/storage/sqlite_audit_store.py`: WAL mode sqlite persistence ensuring zero database lockups during concurrent fuzzing. | Implemented |
-| | `hermes_state_pidns.py` | `infrastructure/executors/kali_runner.py`: Process group isolation for subprocess CLI tool invocation. | Implemented |
-| **`for-learn-claude-cli`** | `microCompact` | `application/orchestration/evidence_compressor.py`: Compresses verbose tool output while strictly preserving factual finding tokens. | Planned |
-| | `autoDream` | `application/orchestration/background_dreamer.py`: Offline idle-time reflection consolidating graph insights into knowledge rules. | Planned |
+| **`oh-my-pi`** | `packages/snapcompact` | `application/orchestration/context_compactor.py`: Sliding-window snapshot compaction of HTTP evidence without losing raw bytes. | **Completed (Phase 5)** |
+| | `packages/tui` | `presentation/tui/`: Rich interactive terminal interface with live execution cards, progress bars, and hotkeys. | **Completed (Phase 7)** |
+| | `crates/pi-ast` | `infrastructure/discovery/sast_bridge.py`: Rapid AST regex extraction for endpoint controllers and route decorators. | **Completed** |
+| **`openclaw`** | `packages/worker-runtime` | `infrastructure/executors/worker_runtime.py`: Process isolation and memory heap management for long-running pentest campaigns. | **Completed** |
+| | `packages/tool-call-repair` | `infrastructure/reasoning/tool_call_repair.py`: Deterministic recovery and JSON syntax repair for malformed model outputs. | **Completed** |
+| | `packages/net-policy` | `domain/safety/net_policy.py`: IP/CIDR scope boundary enforcement and forbidden private network tripwires. | **Completed** |
+| **`opencode`** | `packages/http-recorder` | `infrastructure/interception/http_recorder.py`: Bit-for-bit HTTP request/response journaling for deterministic PoC replay. | **Completed** |
+| | `packages/effect-drizzle-sqlite` | `infrastructure/storage/sqlite_session_store.py`: Transactional SQLite persistence with schema migrations. | **Completed** |
+| **`hermes-agent`** | `hermes_state_wal.py` | `infrastructure/storage/sqlite_audit_store.py`: WAL mode sqlite persistence ensuring zero database lockups during concurrent fuzzing. | **Completed (Phase 5)** |
+| | `hermes_state_pidns.py` | `infrastructure/executors/kali_runner.py`: Process group isolation for subprocess CLI tool invocation. | **Completed** |
+| **`for-learn-claude-cli`** | `microCompact` | `application/orchestration/evidence_compressor.py`: Compresses verbose tool output while strictly preserving factual finding tokens. | **Completed (Phase 5)** |
+| | `autoDream` | `application/orchestration/background_dreamer.py`: Offline idle-time reflection consolidating graph insights into knowledge rules. | **Completed (Phase 5)** |
 
 ---
 
@@ -74,7 +74,7 @@ The mission of this repository is to build an **Evidence-Guided, Autonomous Agen
 | **`awesome-jev`** | Confidence-Gated Escalation | `application/orchestration/dual_brain_router.py`: Fast-path execution when confidence $\ge 0.85$; escalate to System 2 when $< 0.85$. | **Completed (`9c11702`)** |
 | **`single-agent-loop-kit`** | Single Agent Loop + Skills | `application/skills/skill_manager.py`: Main agent loop loading specialized playbooks on-demand, cutting prompt bloat by 80%. | **Completed** |
 | **`memsearch` & `agent-beacon`** | Markdown Memory + Reranking | `infrastructure/storage/episodic_knowledge.py`: Cross-engagement durable knowledge, WAF bypass memory, and dead-class skip logic. | **Completed (`4847321`)** |
-| **`jevgrep`** | Semantic code search | `infrastructure/discovery/semantic_grepper.py`: Identifies vulnerable controller routines without ingesting entire codebases. | Planned |
+| **`jevgrep`** | Semantic code search | `infrastructure/discovery/semantic_grepper.py`: Identifies vulnerable controller routines without ingesting entire codebases. | **Completed** |
 
 ---
 
@@ -88,22 +88,22 @@ The mission of this repository is to build an **Evidence-Guided, Autonomous Agen
 | **`google__mantis`** | Attack Surface Management | `infrastructure/discovery/osint_scanner.py`: Subdomain enumeration, dangling CNAME takeover, and cloud bucket leakage. | **Completed (`4847321`)** |
 | **`elementalsouls__Claude-BugHunter`**| Dead-Class Pruning | `infrastructure/storage/episodic_knowledge.py`: Negative finding tracker skipping hopeless test classes after 5 failures. | **Completed (`4847321`)** |
 | **`CyberStrikeus__CyberStrike`** | HackBrowser Stealth Evasion | `infrastructure/discovery/playwright_crawler.py`: `navigator.webdriver` masking and anti-bot fingerprint spoofing. | **Completed (`4847321`)** |
-| **`jfreemansh__Anonproxy`** | Proxy Rotation & WAF Bypass | `infrastructure/proxy/proxy_rotator.py`: Dynamic Tor / SOCKS5 upstream rotation with IP reputation tracking. | Phase 3 |
-| **`Armur-Ai__Pentest-Swarm-AI`** | Multi-Target Swarm Workers | `application/orchestration/swarm_orchestrator.py`: Concurrent task worker pool for subnet and multi-domain pentests. | Phase 6 |
-| **`zgsfsec__Full-Chain-Sentinel`** | Threat Intel & OpenAPI Synth | `infrastructure/discovery/threat_intel_bridge.py`: FOFA, 360 Quake, Hunter integration & OpenAPI 3.0 auto-generation. | Phase 6 |
+| **`jfreemansh__Anonproxy`** | Proxy Rotation & WAF Bypass | `infrastructure/proxy/proxy_rotator.py`: Dynamic Tor / SOCKS5 upstream rotation with IP reputation tracking. | **Completed (Phase 3)** |
+| **`Armur-Ai__Pentest-Swarm-AI`** | Multi-Target Swarm Workers | `application/orchestration/swarm_orchestrator.py`: Concurrent task worker pool for subnet and multi-domain pentests. | **Completed (Phase 6)** |
+| **`zgsfsec__Full-Chain-Sentinel`** | Threat Intel & OpenAPI Synth | `infrastructure/discovery/threat_intel_bridge.py`: FOFA, 360 Quake, Hunter integration & OpenAPI 3.0 auto-generation. | **Completed (Phase 6)** |
 
 ---
 
 ## 3. Work Breakdown Structure (WBS) & Phased Milestones
 
 ```
-[Phase 1] Dual-Brain Intelligence & System 1 Gating       ──> [DONE: Commit 9c11702]
-[Phase 2] OSINT, Attack Surface & Anti-Bot Stealth         ──> [DONE: Commit 4847321]
-[Phase 3] Proxy Rotation, WAF Bypass & Traffic Anonymity   ──> [MILESTONE 3]
-[Phase 4] Semantic Invariant Expansion & Zero-Dep PoC      ──> [MILESTONE 4]
-[Phase 5] Lossless Compaction, SQLite WAL & autoDream      ──> [MILESTONE 5]
-[Phase 6] Threat Intel Platforms & Multi-Target Swarms     ──> [MILESTONE 6]
-[Phase 7] Unified TUI & Live SSE Attack Flow Canvas        ──> [MILESTONE 7]
+[Phase 1] Dual-Brain Intelligence & System 1 Gating       ──> [COMPLETED: Commit 9c11702]
+[Phase 2] OSINT, Attack Surface & Anti-Bot Stealth         ──> [COMPLETED: Commit 4847321]
+[Phase 3] Proxy Rotation, WAF Bypass & Traffic Anonymity   ──> [COMPLETED: 100% Tests Pass]
+[Phase 4] Semantic Invariant Expansion & Zero-Dep PoC      ──> [COMPLETED: 100% Tests Pass]
+[Phase 5] Lossless Compaction, SQLite WAL & autoDream      ──> [COMPLETED: 100% Tests Pass]
+[Phase 6] Threat Intel Platforms & Multi-Target Swarms     ──> [COMPLETED: 100% Tests Pass]
+[Phase 7] Unified TUI & Live SSE Attack Flow Canvas        ──> [COMPLETED: 100% Tests Pass]
 ```
 
 ### Phase 3: Proxy Rotation, WAF Bypass & Traffic Anonymity

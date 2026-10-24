@@ -135,5 +135,12 @@ def test_generate_multi_language_pocs() -> None:
 
     # 4. generate_all_pocs
     all_pocs = generator.generate_all_pocs(finding)
-    assert set(all_pocs.keys()) == {"python", "curl", "go", "node"}
+    assert set(all_pocs.keys()) == {"python", "urllib", "curl", "go", "node"}
     assert "requests.request" in all_pocs["python"]
+    assert "urllib.request" in all_pocs["urllib"]
+
+    # 5. Pure stdlib urllib PoC direct
+    urllib_code = generator.generate_urllib_poc(finding)
+    assert "import urllib.request" in urllib_code
+    assert "token_bob" in urllib_code
+    assert "test_vulnerability()" in urllib_code
