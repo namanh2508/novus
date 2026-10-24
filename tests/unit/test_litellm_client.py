@@ -6,7 +6,19 @@ from agentic_pentest.infrastructure.reasoning.litellm_client import LiteLLMClien
 
 
 @pytest.mark.asyncio
-async def test_offline_fallback_plan() -> None:
+async def test_offline_fallback_plan(monkeypatch: pytest.MonkeyPatch) -> None:
+    for key in [
+        "OPENAI_BASE_URL",
+        "LLM_BASE_URL",
+        "OPENAI_API_KEY",
+        "ANTHROPIC_API_KEY",
+        "GEMINI_API_KEY",
+        "DEEPSEEK_API_KEY",
+        "OPENROUTER_API_KEY",
+        "GROQ_API_KEY",
+    ]:
+        monkeypatch.delenv(key, raising=False)
+
     client = LiteLLMClient(fallback_offline=True)
     plan = await client.generate_structured_plan(
         system_prompt="System instructions",
