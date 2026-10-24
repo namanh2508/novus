@@ -1,4 +1,5 @@
 """Script to extract and export high-fidelity logo assets from analyst/icon.png."""
+
 from collections import deque
 from pathlib import Path
 
@@ -49,6 +50,7 @@ def flood_fill_corners(img: Image.Image, tolerance: int = 25) -> Image.Image:
 
     return rgba
 
+
 def process_assets() -> None:
     src_path = Path("analyst/icon.png")
     if not src_path.exists():
@@ -93,6 +95,7 @@ def process_assets() -> None:
     avatar_512 = avatar_trans.resize((512, 512), Image.Resampling.LANCZOS)
     avatar_512.save(out_dir / "avatar.png", "PNG")
     print(f"Saved {out_dir / 'avatar.png'}")
+
 
 if __name__ == "__main__":
     process_assets()

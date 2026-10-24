@@ -9,6 +9,7 @@ import urllib.request
 import pytest
 from typer.testing import CliRunner
 
+from agentic_pentest.presentation.banner_art import render_mascot_table
 from agentic_pentest.presentation.chat import InteractiveChatSession
 from agentic_pentest.presentation.cli import app
 from agentic_pentest.presentation.demo_server import start_live_demo_server
@@ -63,6 +64,22 @@ def test_chat_session_commands() -> None:
     session.show_graph()
     session.show_findings()
     session.show_poc()
+    session.show_banner()
+    assert session.compact_mode is False
+    session.toggle_compact()
+    assert session.compact_mode is True
+    session.toggle_compact()
+    assert session.compact_mode is False
+
+
+def test_mascot_table_rendering() -> None:
+    table_full = render_mascot_table(compact=False)
+    assert table_full is not None
+    assert len(table_full.rows) == 10
+
+    table_compact = render_mascot_table(compact=True)
+    assert table_compact is not None
+    assert len(table_compact.rows) == 4
 
 
 def test_live_demo_server_bola_token_enforcement() -> None:
