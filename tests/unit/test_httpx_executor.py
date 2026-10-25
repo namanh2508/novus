@@ -62,3 +62,50 @@ async def test_execute_request_with_principal_auth() -> None:
 
     assert req.headers["Authorization"] == "Bearer mock_jwt_token_alice"
     assert req.headers["X-Custom-Header"] == "CustomVal"
+
+
+@pytest.mark.asyncio
+async def test_roe_blocks_forbidden_path() -> None:
+    from agentic_pentest.domain.safety.rules_of_engagement import RoEViolationError
+
+    executor = HTTPXExecutor(allowed_hosts=["localhost:8888"])
+    with pytest.raises(RoEViolationError) as exc_info:
+        await executor.execute_request(
+            method="POST",
+            url="http://localhost:8888/api/admin/reset-database",
+        )
+    assert "matches forbidden path pattern" in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_roe_rate_limiter_throttles_burst() -> None:
+    from agentic_pentest.domain.safety.rules_of_engagement import (
+        LeakyBucketRateLimiter,
+        RoEViolationError,
+        RulesOfEngagement,
+    )
+
+    respx.get("http://localhost:8888/api/fast").mock(return_value=Response(200, json={"ok": True}))
+
+    # Low capacity rate limiter: burst 2, rate 1/s
+    roe = RulesOfEngagement(
+        authorized_domains=("localhost:8888",),
+        max_requests_per_second=1.0,
+        burst_capacity=2,
+    )
+    limiter = LeakyBucketRateLimiter(rate_per_second=1.0, burst=2)
+    executor = HTTPXExecutor(
+        allowed_hosts=["localhost:8888"],
+        rules_of_engagement=roe,
+        rate_limiter=limiter,
+    )
+
+    # First 2 requests succeed (within burst)
+    await executor.execute_request("GET", "http://localhost:8888/api/fast")
+    await executor.execute_request("GET", "http://localhost:8888/api/fast")
+
+    # 3rd request without delay should exceed rate limit
+    with pytest.raises(RoEViolationError) as exc_info:
+        await executor.execute_request("GET", "http://localhost:8888/api/fast")
+    assert "Rate limit exceeded" in str(exc_info.value)
