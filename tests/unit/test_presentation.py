@@ -230,3 +230,60 @@ def test_checkpoint_save_and_resume() -> None:
     # Cleanup test checkpoint
     if cp_path.exists():
         cp_path.unlink()
+
+
+def test_cli_auto_command_help() -> None:
+    result = runner.invoke(app, ["auto", "--help"])
+    assert result.exit_code == 0
+    assert "autonomous" in result.stdout.lower()
+    assert "--sarif" in result.stdout
+    assert "--safe-mode" in result.stdout
+
+
+@pytest.mark.asyncio
+async def test_chat_rollback_and_mission() -> None:
+    session = InteractiveChatSession(target_url="http://127.0.0.1:8888")
+    # 1. Rollback status executes without error on empty journal
+    await session.show_rollback_status()
+
+    # 2. Record a mutation and check rollback status
+    from agentic_pentest.domain.safety.rollback_journal import CompensationType, RollbackRecipe
+
+    session.rollback_manager.journal.record_mutation(
+        entry_id="rb-test-01",
+        target_endpoint="http://127.0.0.1:8888/identity/api/v2/vehicle/v-1",
+        original_method="DELETE",
+        target_object_id="v-1",
+        recipe=RollbackRecipe(
+            revert_method="POST",
+            revert_url="http://127.0.0.1:8888/identity/api/v2/vehicle",
+            compensation_type=CompensationType.RECREATE_VIA_POST,
+            revert_body='{"id": "v-1"}',
+        ),
+        original_state_body='{"id": "v-1"}',
+    )
+    assert session.rollback_manager.journal.pending_count == 1
+
+    from datetime import UTC, datetime
+    from unittest.mock import AsyncMock
+
+    from agentic_pentest.domain.entities import HTTPRequestObservation, HTTPResponseObservation
+
+    mock_resp = HTTPResponseObservation(
+        status_code=201,
+        headers={},
+        body='{"status": "restored"}',
+        body_sha256="abc123hash",
+        latency_ms=1.0,
+        timestamp=datetime.now(UTC),
+    )
+    mock_req = HTTPRequestObservation(
+        method="POST",
+        url="http://127.0.0.1:8888/identity/api/v2/vehicle",
+        headers={},
+        body='{"id": "v-1"}',
+        timestamp=datetime.now(UTC),
+    )
+    session.executor.execute_request = AsyncMock(return_value=(mock_req, mock_resp))
+    await session.show_rollback_status()
+    assert session.rollback_manager.journal.restored_count == 1

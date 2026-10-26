@@ -55,4 +55,8 @@ async def test_eval_runner_synthetic(tmp_path: Path) -> None:
     assert summary.passed_count == 4
     assert summary.failed_count == 0
     assert summary.accuracy_ex == 100.0
+    assert summary.false_positives == 0
+    assert summary.precision == 1.0
+    assert summary.recall == 1.0
+    assert summary.f1_score == 1.0
     assert len(summary.results) == 4
